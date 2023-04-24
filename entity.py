@@ -41,6 +41,7 @@ class Entity:
     ]
     """
 
+    # TODO: should have "mode"=create/fetch depending on pulled from triple store or created (default)
     def __init__(self,
                  class_uri: str = None,
                  uri: str = None,
@@ -63,6 +64,7 @@ class Entity:
             self.uri = uri
 
         if labels:
+            # TODO: move to .load_labels(data=labels)
             # Validate contents of the label list before adding
             assert type(labels) == list, "Invalid type. Expected a list."
             label_schema = LabelSchema()
