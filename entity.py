@@ -5,7 +5,7 @@ Provides basic functionality of all entities.
 import logging
 from marshmallow import Schema, fields, ValidationError
 from sparql import DB
-from rdflib import Graph, Namespace, Literal, URIRef, RDF, RDFS, XSD
+from rdflib import Graph, Literal, URIRef, RDF, RDFS
 from dracor import DraCor
 
 
@@ -225,7 +225,7 @@ class Entity:
 
         return g
 
-    def get_graph(self) -> Graph:
+    def dump(self) -> Graph:
         """Return the graph
 
         Returns:
@@ -234,22 +234,12 @@ class Entity:
         """
         return self.graph
 
-    def serialize_graph(self, format: str = "ttl"):
+    def serialize(self, format: str = "ttl"):
         """Serialize the graph
 
         Args:
             format (str): Format of the serialization. Defaults to "ttl". Other values: e.g. "xml"
         """
         return self.graph.serialize(format=format)
-
-
-class CRM_Entity(Entity):
-    """ A Dummy entity; just for reference on how to use super()
-    """
-
-    class_uri = "http://www.cidoc-crm.org/cidoc-crm/" + "E1_CRM_Entity"
-
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
 
 
