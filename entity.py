@@ -23,7 +23,6 @@ class Entity:
     Attributes:
         class_uri: URI of the Entity Class
         uri (str): URI of the Entity
-        labels (list): Labels
         database (DB): Triple Store connection
         graph (Graph): Entity as rdflib.Graph
     """
@@ -34,16 +33,6 @@ class Entity:
     # URI
     uri = None
 
-    # rdfs:labels
-    labels = None
-    """
-    [ 
-        {
-            "lang": "de", 
-            "label" : "Das ist das label"
-        } 
-    ]
-    """
     # Database connection
     database = None
 
@@ -67,23 +56,37 @@ class Entity:
             mode (str): Create new data ("create") or fetch ("fetch") existing data from a triple store
             database (DB): Triple Store Connection
         """
-        if class_uri:
-            assert type(class_uri) == str, "Invalid type. Expected a string."
-            self.class_uri = class_uri
+
+        # Create the graph
+        self.graph = self.__initialize_graph()
 
         if uri:
             assert type(uri) == str, "Invalid type. Expected a string."
             self.uri = uri
 
+        if class_uri:
+            assert type(class_uri) == str, "Invalid type. Expected a string."
+            self.class_uri = class_uri
+            self.graph = self.graph + self.add_rdf_class()
+
+        elif self.class_uri:
+            # this was set on the class level; should also add it to the graph
+            self.graph = self.graph + self.add_rdf_class()
+
         if labels:
-            self.load_labels(data=labels, mode=mode)
+            """
+                [ 
+                    {
+                        "lang": "de", 
+                        "label" : "Das ist das label"
+                    } 
+                ]
+            """
+            self.add_labels(data=labels, mode=mode)
 
         if database:
             assert type(database) == DB, "Invalid type. Expected sparql.DB (database connection)."
-            self.database=database
-
-        # Create the graph
-        self.graph = self.__initialize_graph()
+            self.database = database
 
     @staticmethod
     def __item_is_valid(item: dict, schema: Schema) -> bool:
@@ -119,19 +122,15 @@ class Entity:
 
         return g
 
-    def load_labels(self,
-                    data: list = None,
-                    mode: str = "create",
-                    validation: bool = True) -> bool:
-        """Load labels data.
+    def add_labels(self, data: list = None, mode: str = "create") -> bool:
+        """Add rdfs: labels to the graph.
 
         If the flag is set to create, it is expected, that there is a list of labels passed as "data".
-        If "mode" is set to "fetch" data should be retrieved from the triple store using self.database.
+        mode="fetch" is not implemented.
 
         Args:
             data (list): Data of labels. Should confirm to schema LabelSchema.
-            mode (str): create from labels data or fetch ("fetch") data from triple store. Defaults to "create".
-            validation (bool): Validate with LabelSchema Defaults to True.
+            mode (str): create from labels data or fetch ("fetch"). Defaults to "create".
 
         Returns:
             bool: True if successful
@@ -139,67 +138,93 @@ class Entity:
         """
         if mode == "create":
             logging.debug("Trying to create labels from data.")
-
-            if data:
-                assert type(data) == list, "Invalid type. Expected a list."
-
-                # should be cast into a list (was None?!)
-                # Would be better to check for the type and then append, if it is already a list; this will overwrite
-                self.labels = []
-
-                if validation:
-                    schema = LabelSchema()
-
-                for item in data:
-                    if validation:
-                        if self.__item_is_valid(item, schema) is True:
-                            self.labels.append(item)
-                        else:
-                            logging.debug("Validation of item failed.")
-                            pass
-                    else:
-                        self.labels.append(item)
-
-                # Operation was successful, if it appended a label
-                if len(self.labels) > 0:
-                    logging.debug(f"Successfully added {len(self.labels)} labels.")
-                    return True
-                else:
-                    return False
-            else:
-                logging.warning("No data provided. Can not load labels.")
-                return False
+            labels_g = self.__generate_rdfs_labels(labels=data)
+            self.graph = self.graph + labels_g
+            return True
 
         else:
             raise Exception("Fetching data not implemented.")
 
-    def generate_graph(self,
-                       lang_to_literals: bool = False):
-        """Populate the self.graph with data
+    def __generate_rdfs_labels(self,
+                               domain_uri: str = None,
+                               labels: list = None,
+                               lang_to_literals: bool = False,
+                               validation: bool = True) -> Graph:
+        """Generate rdfs:labels
 
         Args:
+            domain_uri (str): URI of the domain. Defaults to self.uri
+            labels (list): label data
             lang_to_literals (bool): Explicitly add language to literals. Defaults to False.
 
         Returns:
+            Graph: rdflib.Graph containing the labels
 
         """
-        assert self.uri, "URI is needed to generate the graph."
-        this = URIRef(self.uri)
+        if labels:
+            assert type(labels) == list, "Invalid type. Expected a list."
 
-        if self.class_uri:
-            self.graph.add(this, RDF.type, URIRef(self.class_uri))
+            if validation:
+                schema = LabelSchema()
+                for item in labels:
+                    if self.__item_is_valid(item, schema) is False:
+                        labels.pop(item)
+                        logging.debug("Validation of item failed. Removed.")
 
-        # RDFS labels
-        if self.labels:
+            if len(labels) > 0:
 
-            if lang_to_literals is False and len(self.labels) > 1:
-                logging.warning("There are multiple labels, but 'lang_to_literals' is set to False. Not adding lang.")
+                g = Graph()
 
-            for item in self.labels:
-                pass
-            # TODO: continue here.
+                if domain_uri:
+                    domain = URIRef(domain_uri)
+                else:
+                    domain = URIRef(self.uri)
 
+                if len(labels) > 1 and lang_to_literals is False:
+                    logging.warning("Set not to explicitly add language, but provided multiple labels.")
 
+                for item in labels:
+                    if lang_to_literals is False:
+                        g.add((domain, RDFS.label, Literal(item["label"])))
+                    else:
+                        g.add(domain, RDFS.label, Literal(item["label"], lang=item["lang"]))
+
+                return g
+
+            else:
+                logging.warning("No label data validated. Can not create labels.")
+                return Graph()
+
+        else:
+            logging.warning("No label data provided. Can not create labels.")
+            return Graph()
+
+    def add_rdf_class(self, domain_uri: str = None, class_uri: str = None) -> Graph:
+        """Add a rdf:type statement to the graph
+
+        domain_uri a class_uri
+
+        Args:
+            domain_uri (str): URI of the domain. Defaults to self.uri
+            class_uri (str): URI of the class Defaults to self.class_uri
+
+        Returns:
+            Graph: rdflib Graph
+        """
+        if domain_uri:
+            domain_e = URIRef(domain_uri)
+        else:
+            domain_e = URIRef(self.uri)
+
+        if class_uri:
+            range_e = URIRef(class_uri)
+        else:
+            range_e = URIRef(self.class_uri)
+
+        g = Graph()
+        g.add((domain_e, RDF.type, range_e))
+
+        return g
 
 
 class CRM_Entity(Entity):
