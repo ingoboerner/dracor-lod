@@ -22,33 +22,35 @@ class CRM_Entity(Entity):
     def is_identified_by(self, *entities, uris: list = None) -> bool:
         """P1 is identified by
 
+        Add triples to the self.graph either for each passed entity or for each URI provided in "uris".
+
         Args:
+            *entities: Any number of instances of an Entity class
             uris (list, optional): List of URIs of entities that identify this
 
         Returns:
             bool: True if added
 
         """
-
-        if uris:
-            logging.debug("Will add P1 is identified by and inverse for each uri.")
-
-            assert type(self.graph) == Graph, "Entity doesn't have a graph to add data to."
-
-            for id_uri in uris:
-                self.graph.add((URIRef(self.uri), CRM.P1_is_identified_by, URIRef(id_uri)))
-                self.graph.add((URIRef(id_uri), CRM.P1i_identifies, URIRef(self.uri)))
+        prop = CRM.P1_is_identified_by
+        prop_inverse = CRM.P1i_identifies
 
         if entities:
             for entity in entities:
-                id_uri = entity.uri
-                self.graph.add((URIRef(self.uri), CRM.P1_is_identified_by, URIRef(id_uri)))
-                self.graph.add((URIRef(id_uri), CRM.P1i_identifies, URIRef(self.uri)))
+                g = self.generate_property_to_entity_triples(entity, prop=prop, prop_inverse=prop_inverse)
+                self.graph = self.graph + g
 
-                # add the graph data
-                self.graph = self.graph + entity.graph
+            return True
 
-        return True
+        elif uris:
+            g = self.generate_property_to_uris_triples(uris=uris, prop=prop, prop_inverse=prop_inverse)
+            self.graph = self.graph + g
+
+            return True
+
+        else:
+            logging.warning("No data provided to generate triples from.")
+            return False
 
 
 class Appellation(CRM_Entity):

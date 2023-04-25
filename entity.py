@@ -137,7 +137,6 @@ class Entity:
 
         """
         if mode == "create":
-            logging.debug("Trying to create labels from data.")
             self.graph = self.graph + self.__generate_rdfs_labels(labels=data)
             return True
 
@@ -237,6 +236,111 @@ class Entity:
         g.add((domain_e, RDF.type, range_e))
 
         return g
+
+    def generate_property_to_uris_triples(self,
+                                            domain_uri: str = None,
+                                            prop: URIRef = None,
+                                            prop_inverse: URIRef = None,
+                                            uris: list = None) -> Graph:
+        """Add triples to graph: self.uri prop uri.
+
+        Args:
+            domain_uri (str): Domain. Defaults to self.uri.
+            prop (URIRef, optional): Property. Expected rdflib.term.URIRef, e.g. CRM.P1_is_identified_by
+            prop_inverse (URIRef, optional): Inverse Property. Expected rdflib.term.URIRef, e.g. CRM.P1i_identifies
+            uris (list): list of URIs that will be the range of the triples.
+
+        Returns:
+            Graph: Triples in a graph
+        """
+        if prop:
+            assert type(prop) == URIRef, "Invalid type. Expected property prop as URIRef."
+
+        if prop_inverse:
+            assert type(prop_inverse) == URIRef, "Invalid type. Expected property prop_inverse as URIRef."
+
+        if domain_uri:
+            domain_e = URIRef(domain_uri)
+        else:
+            # Default will be self.uri, which means: this entity
+            if self.uri:
+                domain_e = URIRef(self.uri)
+            else:
+                logging.warning("No self.uri set. Will not create anything.")
+                return Graph()
+
+        if uris:
+            assert type(uris) == list, "Invalid type. Expected a list of uris."
+
+            # results graph
+            g = Graph()
+
+            for id_uri in uris:
+                if prop:
+                    g.add((domain_e, prop, URIRef(id_uri)))
+
+                if prop_inverse:
+                    g.add((URIRef(id_uri), prop_inverse, domain_e))
+
+            return g
+
+        else:
+            logging.warning("No uris set. Will not create anything.")
+            return Graph()
+
+    def generate_property_to_entity_triples(self,
+                                                entity,
+                                                domain_uri: str = None,
+                                                prop: URIRef = None,
+                                                prop_inverse: URIRef = None,
+                                                ) -> Graph:
+        """Add triples to graph: self.uri prop entity.uri.
+
+        Args:
+            entity: Instance of an entity class
+            domain_uri (str): URI of the domain.
+            prop_inverse (URIRef, optional): Inverse Property. Expected rdflib.term.URIRef, e.g. CRM.P1i_identifies
+            prop (URIRef): Property. Expected rdflib.term.URIRef, e.g. CRM.P1_is_identified_by
+
+        Returns:
+            Graph: Triples in a graph
+        """
+        if prop:
+            assert type(prop) == URIRef, "Invalid type. Expected property prop as URIRef."
+
+        if prop_inverse:
+            assert type(prop_inverse) == URIRef, "Invalid type. Expected property prop_inverse as URIRef."
+
+        if domain_uri:
+            domain_e = URIRef(domain_uri)
+        else:
+            # Default will be self.uri, which means: this entity
+            if self.uri:
+                domain_e = URIRef(self.uri)
+            else:
+                logging.warning("No self.uri set. Will not create anything.")
+                return Graph()
+
+        if entity:
+
+            # results graph
+            g = Graph()
+
+            if entity.uri:
+
+                if prop:
+                    g.add((domain_e, prop, URIRef(entity.uri)))
+                    g = g + entity.graph
+
+                if prop_inverse:
+                    g.add((URIRef(entity.uri), prop_inverse, domain_e))
+                    g = g + entity.graph
+
+            return g
+
+        else:
+            logging.warning("No entities provided. Will not create anything.")
+            return Graph()
 
     def dump(self) -> Graph:
         """Return the graph
