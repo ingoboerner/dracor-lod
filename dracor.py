@@ -2,7 +2,6 @@
 
 """
 import logging
-from rdflib import Graph, Namespace, Literal, URIRef, RDF, RDFS, XSD
 
 
 class DraCor:

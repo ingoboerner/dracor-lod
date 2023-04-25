@@ -5,6 +5,8 @@ Provides basic functionality of all entities.
 import logging
 from marshmallow import Schema, fields, ValidationError
 from sparql import DB
+from rdflib import Graph, Namespace, Literal, URIRef, RDF, RDFS, XSD
+from dracor import DraCor
 
 
 class LabelSchema(Schema):
@@ -23,6 +25,7 @@ class Entity:
         uri (str): URI of the Entity
         labels (list): Labels
         database (DB): Triple Store connection
+        graph (Graph): Entity as rdflib.Graph
     """
 
     # URI of the class
@@ -44,7 +47,9 @@ class Entity:
     # Database connection
     database = None
 
-    # TODO: should have "mode"=create/fetch depending on pulled from triple store or created (default)
+    # Graph
+    graph = None
+
     def __init__(self,
                  class_uri: str = None,
                  uri: str = None,
@@ -77,6 +82,9 @@ class Entity:
             assert type(database) == DB, "Invalid type. Expected sparql.DB (database connection)."
             self.database=database
 
+        # Create the graph
+        self.graph = self.__initialize_graph()
+
     @staticmethod
     def __item_is_valid(item: dict, schema: Schema) -> bool:
         """Helper function to validate labels
@@ -94,6 +102,23 @@ class Entity:
         except ValidationError:
             logging.debug("Validation failed.")
             return False
+
+    @staticmethod
+    def __initialize_graph() -> Graph:
+        """Return a bare rdflib.graph with prefixes
+
+        Returns:
+            bool: True if successful
+        """
+
+        g = Graph()
+
+        # add the namespaces
+        for item in DraCor.ontologies:
+            g.namespace_manager.bind(item["prefix"], URIRef(item["uri"]))
+
+        return g
+
     def load_labels(self,
                     data: list = None,
                     mode: str = "create",
@@ -147,6 +172,34 @@ class Entity:
 
         else:
             raise Exception("Fetching data not implemented.")
+
+    def generate_graph(self,
+                       lang_to_literals: bool = False):
+        """Populate the self.graph with data
+
+        Args:
+            lang_to_literals (bool): Explicitly add language to literals. Defaults to False.
+
+        Returns:
+
+        """
+        assert self.uri, "URI is needed to generate the graph."
+        this = URIRef(self.uri)
+
+        if self.class_uri:
+            self.graph.add(this, RDF.type, URIRef(self.class_uri))
+
+        # RDFS labels
+        if self.labels:
+
+            if lang_to_literals is False and len(self.labels) > 1:
+                logging.warning("There are multiple labels, but 'lang_to_literals' is set to False. Not adding lang.")
+
+            for item in self.labels:
+                pass
+            # TODO: continue here.
+
+
 
 
 class CRM_Entity(Entity):
