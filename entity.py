@@ -67,11 +67,11 @@ class Entity:
         if class_uri:
             assert type(class_uri) == str, "Invalid type. Expected a string."
             self.class_uri = class_uri
-            self.graph = self.graph + self.add_rdf_class()
+            self.graph = self.graph + self.instance_of_class()
 
         elif self.class_uri:
             # this was set on the class level; should also add it to the graph
-            self.graph = self.graph + self.add_rdf_class()
+            self.graph = self.graph + self.instance_of_class()
 
         if labels:
             """
@@ -138,8 +138,7 @@ class Entity:
         """
         if mode == "create":
             logging.debug("Trying to create labels from data.")
-            labels_g = self.__generate_rdfs_labels(labels=data)
-            self.graph = self.graph + labels_g
+            self.graph = self.graph + self.__generate_rdfs_labels(labels=data)
             return True
 
         else:
@@ -199,8 +198,8 @@ class Entity:
             logging.warning("No label data provided. Can not create labels.")
             return Graph()
 
-    def add_rdf_class(self, domain_uri: str = None, class_uri: str = None) -> Graph:
-        """Add a rdf:type statement to the graph
+    def instance_of_class(self, domain_uri: str = None, class_uri: str = None) -> Graph:
+        """Create a graph containing the statement domain_uri a class_uri
 
         domain_uri a class_uri
 
@@ -226,6 +225,23 @@ class Entity:
 
         return g
 
+    def get_graph(self) -> Graph:
+        """Return the graph
+
+        Returns:
+            Graph: Instance as Graph
+
+        """
+        return self.graph
+
+    def serialize_graph(self, format: str = "ttl"):
+        """Serialize the graph
+
+        Args:
+            format (str): Format of the serialization. Defaults to "ttl". Other values: e.g. "xml"
+        """
+        return self.graph.serialize(format=format)
+
 
 class CRM_Entity(Entity):
     """ A Dummy entity; just for reference on how to use super()
@@ -235,3 +251,5 @@ class CRM_Entity(Entity):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+
+
