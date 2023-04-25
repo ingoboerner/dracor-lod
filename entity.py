@@ -177,7 +177,11 @@ class Entity:
                 if domain_uri:
                     domain = URIRef(domain_uri)
                 else:
-                    domain = URIRef(self.uri)
+                    if self.uri:
+                        domain = URIRef(self.uri)
+                    else:
+                        logging.warning("No URI of this entity is set. Will not add labels.")
+                        return Graph()
 
                 if len(labels) > 1 and lang_to_literals is False:
                     logging.warning("Set not to explicitly add language, but provided multiple labels.")
@@ -213,12 +217,21 @@ class Entity:
         if domain_uri:
             domain_e = URIRef(domain_uri)
         else:
-            domain_e = URIRef(self.uri)
+            # assert self.uri, "No URI for instance is set."
+            if self.uri:
+                domain_e = URIRef(self.uri)
+            else:
+                logging.warning("No URI of this entity is set. Will not add rdf:type statement.")
+                return Graph()
 
         if class_uri:
             range_e = URIRef(class_uri)
         else:
-            range_e = URIRef(self.class_uri)
+            if self.class_uri:
+                range_e = URIRef(self.class_uri)
+            else:
+                logging.warning("Class URI is not set globally and no URI for range is set.")
+                return Graph()
 
         g = Graph()
         g.add((domain_e, RDF.type, range_e))
