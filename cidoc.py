@@ -3,7 +3,7 @@ in between that have not been implemented.
 
 """
 import logging
-from rdflib import Graph, URIRef, Namespace
+from rdflib import Namespace, URIRef
 from entity import Entity
 
 cidoc_ns = "http://www.cidoc-crm.org/cidoc-crm/"
@@ -22,10 +22,11 @@ class CRM_Entity(Entity):
     def is_identified_by(self, *entities, uris: list = None) -> bool:
         """P1 is identified by
 
-        Add triples to the self.graph either for each passed entity or for each URI provided in "uris".
+        Add triples "P1 is identified by" and inverse to the self.graph either for each passed entity
+        or for each URI provided in "uris".
 
         Args:
-            *entities: Any number of instances of an Entity class
+            *entities (optional): Any number of instances of an Entity class
             uris (list, optional): List of URIs of entities that identify this
 
         Returns:
@@ -35,22 +36,22 @@ class CRM_Entity(Entity):
         prop = CRM.P1_is_identified_by
         prop_inverse = CRM.P1i_identifies
 
-        if entities:
-            for entity in entities:
-                g = self.generate_property_to_entity_triples(entity, prop=prop, prop_inverse=prop_inverse)
-                self.graph = self.graph + g
+        return self.add_triples(entities=list(entities), uris=uris, prop=prop, prop_inverse=prop_inverse)
 
-            return True
+    def has_type(self, *entities, uris: list = None) -> bool:
+        """P2 has type
 
-        elif uris:
-            g = self.generate_property_to_uris_triples(uris=uris, prop=prop, prop_inverse=prop_inverse)
-            self.graph = self.graph + g
+        Args:
+            *entities (optional): Any number of instances of an Entity class
+            uris (list, optional): List of URIs of entities that identify this
 
-            return True
+        Returns:
+             bool: True if added
+        """
+        prop = CRM.P2_has_type
+        prop_inverse = CRM.P2i_is_type_of
 
-        else:
-            logging.warning("No data provided to generate triples from.")
-            return False
+        return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
 
 
 class Appellation(CRM_Entity):
@@ -58,6 +59,16 @@ class Appellation(CRM_Entity):
     """
 
     class_uri = cidoc_ns + "E41_Appellation"
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+
+class Identifier(Appellation):
+    """E42 Identifier
+    """
+
+    class_uri = cidoc_ns + "E42_Identifier"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

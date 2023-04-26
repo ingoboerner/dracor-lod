@@ -342,6 +342,43 @@ class Entity:
             logging.warning("No entities provided. Will not create anything.")
             return Graph()
 
+    def add_triples(self,
+                    entities: list = None,
+                    uris: list = None,
+                    prop: URIRef = None,
+                    prop_inverse: URIRef = None,
+                    ) -> bool:
+        """Add triples to self.graph.
+
+        Domain will be self.uri. Pass either a list of entites (Entity) or a list of uris.
+
+        Args:
+            entities (list, optional): list of entites added as range of the triples
+            uris (list, optional): list of uris added as range of the triples
+            prop (URIRef, optional): Property
+            prop_inverse (URIRef, optional) : Inverse Propery
+
+        Returns:
+            bool: True if successful
+
+        """
+        if entities:
+            for entity in entities:
+                g = self.generate_property_to_entity_triples(entity, prop=prop, prop_inverse=prop_inverse)
+                self.graph = self.graph + g
+
+            return True
+
+        elif uris:
+            g = self.generate_property_to_uris_triples(uris=uris, prop=prop, prop_inverse=prop_inverse)
+            self.graph = self.graph + g
+
+            return True
+
+        else:
+            logging.warning("No data provided to generate triples from.")
+            return False
+
     def dump(self) -> Graph:
         """Return the graph
 
