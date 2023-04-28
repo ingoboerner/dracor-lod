@@ -528,6 +528,9 @@ class Identifier(Appellation):
         super().__init__(**kwargs)
 
 
+# Title
+#class Title()
+
 class Type(Conceptual_Object):
     """E55 Type
 
@@ -578,10 +581,40 @@ class Type(Conceptual_Object):
 
         return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
 
+    def defines_typical_parts_of(self, *entities, uris: list = None) -> bool:
+        """P150 defines typical parts of (defines typical wholes for): E55 Type
+
+        Args:
+            *entities (optional): Any number of instances of an Entity class
+            uris (list, optional): List of URIs of entities that identify this
+
+        Returns:
+             bool: True if added
+        """
+        prop = CRM.P150_defines_typical_parts_of
+        prop_inverse = CRM.P150i_defines_typical_wholes_for
+
+        return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
+
+    def defines_typical_wholes_for(self, *entities, uris: list = None) -> bool:
+        """P150i defines typical wholes for (defines typical parts of): E55 Type
+
+        Args:
+            *entities (optional): Any number of instances of an Entity class
+            uris (list, optional): List of URIs of entities that identify this
+
+        Returns:
+             bool: True if added
+        """
+        prop = CRM.P150i_defines_typical_wholes_for
+        prop_inverse = CRM.P150_defines_typical_parts_of
+
+        return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
+
     def is_type_of(self, *entities, uris: list = None) -> bool:
         """P2i is type of (has type): E1 CRM Entity
 
-        Implemented in both directions, see self.has_broader_term
+        Implemented in both directions, see self.has_type
 
         Args:
             *entities (optional): Any number of instances of an Entity class
@@ -610,15 +643,167 @@ class Measurement_Unit(Type):
         super().__init__(**kwargs)
 
 
-class Activity(CRM_Entity):
+class Temporal_Entity(CRM_Entity):
+    """E2 Temporal Entity
+
+    subClassOf E1 CRM Entity
+
+    P4 has time-span (is time-span of): E52 Time-Span
+    P173 starts before or with the end of (ends after or with the start of): E2 Temporal Entity [Not implemented]
+    P174 starts before the end of (ends after the start of): E2 Temporal Entity [Not implemented]
+    P175 starts before or with the start of (starts after or with the start of): E2 Temporal Entity [Not implemented]
+    P176 starts before the start of (starts after the start of): E2 Temporal Entity [Not implemented]
+    P182 ends before or with the start of (starts after or with the end of): E2 Temporal Entity [Not implemented]
+    P183 ends before the start of (starts after the end of): E2 Temporal Entity [Not implemented]
+    P184 ends before or with the end of (ends with or after the end of): E2 Temporal Entity [Not implemented]
+    P185 ends before the end of (ends after the end of): E2 Temporal Entity [Not implemented]
+
+    """
+    class_uri = cidoc_ns + "E2_Temporal_Entity"
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+    def has_timespan(self, *entities, uris: list = None) -> bool:
+        """P4 has time-span (is time-span of): E52 Time-Span
+
+        Args:
+            *entities (optional): Any number of instances of an Entity class
+            uris (list, optional): List of URIs of entities that identify this
+
+        Returns:
+             bool: True if added
+        """
+        prop = CRM["P4_has_time-span"]
+        prop_inverse = CRM["P4i_is_time-span_of"]
+
+        return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
+
+
+class Period(Temporal_Entity):
+    """E4 Period
+
+    P7 took place at (witnessed): E53 Place
+    P8 took place on or within (witnessed): E18 Physical Thing [Not implemented]
+    P9 consists of (forms part of): E4 Period
+
+    This is there because of the examples: Italian Renaissance (Macdonald, 1992), Sturm und Drang (Berkoff, 2013),
+    Cubism (Cox, 2000), ...
+    """
+
+    class_uri = cidoc_ns + "E4_Period"
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+    def took_place_at(self, *entities, uris: list = None) -> bool:
+        """P7 took place at (witnessed): E53 Place
+
+        Args:
+            *entities (optional): Any number of instances of an Entity class
+            uris (list, optional): List of URIs of entities that identify this
+
+        Returns:
+             bool: True if added
+        """
+        prop = CRM.P7_took_place_at
+        prop_inverse = CRM.P7i_witnessed
+
+        return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
+
+    def consists_of(self, *entities, uris: list = None) -> bool:
+        """P9 consists of (forms part of): E4 Period
+
+        Args:
+            *entities (optional): Any number of instances of an Entity class
+            uris (list, optional): List of URIs of entities that identify this
+
+        Returns:
+             bool: True if added
+        """
+        prop = CRM.P9_consists_of
+        prop_inverse = CRM.P9i_forms_part_of
+
+        return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
+
+
+class Event(Period):
+    """E5 Event
+    SubClassOf E4 Period
+
+    P11 had participant (participated in): E39 Actor
+    P12 occurred in the presence of (was present at): E77 Persistent Item
+    """
+
+    class_uri = cidoc_ns + "E5_Event"
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+    def had_participant(self, *entities, uris: list = None) -> bool:
+        """P11 had participant (participated in): E39 Actor
+
+        Args:
+            *entities (optional): Any number of instances of an Entity class
+            uris (list, optional): List of URIs of entities that identify this
+
+        Returns:
+             bool: True if added
+        """
+        prop = CRM.P11_had_participant
+        prop_inverse = CRM.P11i_participated_in
+
+        return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
+
+    def had_participant(self, *entities, uris: list = None) -> bool:
+        """P12 occurred in the presence of (was present at): E77 Persistent Item
+
+        Args:
+            *entities (optional): Any number of instances of an Entity class
+            uris (list, optional): List of URIs of entities that identify this
+
+        Returns:
+             bool: True if added
+        """
+        prop = CRM.P12_occurred_in_the_presence_of
+        prop_inverse = CRM.P12i_was_present_at
+
+        return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
+
+
+class Activity(Event):
     """E7_Activity
 
-    SubClassOf ??
+    SubClassOf E5 Event
+
+    P14 carried out by (performed): E39 Actor (P14.1 in the role of: E55 Type)
+    P15 was influenced by (influenced): E1 CRM Entity P16 used specific object (was used for): E70 Thing
+    (P16.1 mode of use: E55 Type) [Not implemented]
+    P17 was motivated by (motivated): E1 CRM Entity
+    P19 was intended use of (was made for): E71 Human-Made Thing
+    (P19.1 mode of use: E55 Type) [Not implemented]
+    P20 had specific purpose (was purpose of): E5 Event
+    P21 had general purpose (was purpose of): E55 Type
+    P32 used general technique (was technique of): E55 Type
+    P33 used specific technique (was used by): E29 Design or Procedure
+    P125 used object of type (was type of object used in): E55 Type
 
     TODO: implement
     """
 
     class_uri = cidoc_ns + "E7_Activity"
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+
+class Attribute_Assginment(Activity):
+    """E13 Attribute Assginment
+
+    TODO: implement
+    """
+
+    class_uri = cidoc_ns + "E13_Attribute_Assignment"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -639,3 +824,6 @@ class Dimension(CRM_Entity):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+
+
+# E39 Actor !
