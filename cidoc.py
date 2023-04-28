@@ -395,12 +395,89 @@ class Information_Object(Symbolic_Object, Propositional_Object):
         return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
 
 
+class Design_or_Procedure(Information_Object):
+    """E29 Design or Procedure
+
+    subClassOf E73 Information Object
+
+    P68 foresees use of (use foreseen by): E57 Material [Not implemented]
+    P69 has association with (is associated with): E29 Design or Procedure
+    (P69.1 has type: E55 Type) [Not implemented]
+
+    """
+    class_uri = cidoc_ns + "E29_Design_or_Procedure"
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+    def has_association_with(self, *entities, uris: list = None) -> bool:
+        """P69 has association with (is associated with): E29 Design or Procedure
+
+        Args:
+            *entities (optional): Any number of instances of an Entity class
+            uris (list, optional): List of URIs of entities that identify this
+
+        Returns:
+             bool: True if added
+        """
+        prop = CRM.P69_has_association_with
+        prop_inverse = CRM.P69i_is_associated_with
+
+        return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
+
+
+class Linguistic_Object(Information_Object):
+    """E33 Linguistic Object
+
+    subClassOf E73 Information Object
+
+    P72 has language (is language of): E56 Language
+    P73 has translation (is translation of): E33 Linguistic Object
+    """
+
+    class_uri = cidoc_ns + "E33_Linguistic_Object"
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+    def has_language(self, *entities, uris: list = None) -> bool:
+        """P72 has language (is language of): E56 Language
+
+        Args:
+            *entities (optional): Any number of instances of an Entity class
+            uris (list, optional): List of URIs of entities that identify this
+
+        Returns:
+             bool: True if added
+        """
+        prop = CRM.P72_has_language
+        prop_inverse = CRM.P72i_is_language_of
+
+        return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
+
+    def has_translation(self, *entities, uris: list = None) -> bool:
+        """P73 has translation (is translation of): E33 Linguistic Object
+
+        Args:
+            *entities (optional): Any number of instances of an Entity class
+            uris (list, optional): List of URIs of entities that identify this
+
+        Returns:
+             bool: True if added
+        """
+        prop = CRM.P73_has_translation
+        prop_inverse = CRM.P73i_is_translation_of
+
+        return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
+
+
 class Appellation(Symbolic_Object):
     """E41 Appellation
 
     subClassOf E90 Symbolic Object
 
-    TODO: Implement
+    P139 has alternative form: E41 Appellation
+    Implemented inverse: P1i_identifies: E1 CRM Entity
     """
 
     class_uri = cidoc_ns + "E41_Appellation"
@@ -408,11 +485,41 @@ class Appellation(Symbolic_Object):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
+    def has_alternative_form(self, *entities, uris: list = None) -> bool:
+        """P139 has alternative form: E41 Appellation
+
+        Args:
+            *entities (optional): Any number of instances of an Entity class
+            uris (list, optional): List of URIs of entities that identify this
+
+        Returns:
+             bool: True if added
+        """
+        prop = CRM.P139_has_alternative_form
+        prop_inverse = CRM.P139i_is_alternative_form_of
+
+        return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
+
+    def identifies(self, *entities, uris: list = None) -> bool:
+        """P1i identifies (is identified by): E1 CRM Entity
+
+        Args:
+            *entities (optional): Any number of instances of an Entity class
+            uris (list, optional): List of URIs of entities that identify this
+
+        Returns:
+             bool: True if added
+        """
+        prop = CRM.P1i_identifies
+        prop_inverse = CRM.P1_is_identified_by
+
+        return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
+
 
 class Identifier(Appellation):
     """E42 Identifier
 
-    TODO: Implement
+    No specialized properties.
     """
 
     class_uri = cidoc_ns + "E42_Identifier"
@@ -421,14 +528,83 @@ class Identifier(Appellation):
         super().__init__(**kwargs)
 
 
-class Type(CRM_Entity):
+class Type(Conceptual_Object):
     """E55 Type
-    SubClassOf ??
 
-    TODO: implement
+    SubClassOf E28 Conceptual Object
+
+    P127 has broader term (has narrower term): E55 Type
+    P150 defines typical parts of (define typical wholes for): E55 Type
+
+    Implemented inverse: P2i is type of: E1 CRM Entity
     """
 
     class_uri = cidoc_ns + "E55_Type"
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+    def has_broader_term(self, *entities, uris: list = None) -> bool:
+        """P127 has broader term (has narrower term): E55 Type
+
+        Implemented in both directions, see self.has_broader_term
+
+        Args:
+            *entities (optional): Any number of instances of an Entity class
+            uris (list, optional): List of URIs of entities that identify this
+
+        Returns:
+             bool: True if added
+        """
+        prop = CRM.P127_has_broader_term
+        prop_inverse = CRM.P127i_has_narrower_term
+
+        return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
+
+    def has_narrower_term(self, *entities, uris: list = None) -> bool:
+        """P127i has narrower term (has broader term): E55 Type
+
+        Implemented in both directions, see self.has_broader_term
+
+        Args:
+            *entities (optional): Any number of instances of an Entity class
+            uris (list, optional): List of URIs of entities that identify this
+
+        Returns:
+             bool: True if added
+        """
+        prop = CRM.P127i_has_narrower_term
+        prop_inverse = CRM.P127_has_broader_term
+
+        return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
+
+    def is_type_of(self, *entities, uris: list = None) -> bool:
+        """P2i is type of (has type): E1 CRM Entity
+
+        Implemented in both directions, see self.has_broader_term
+
+        Args:
+            *entities (optional): Any number of instances of an Entity class
+            uris (list, optional): List of URIs of entities that identify this
+
+        Returns:
+             bool: True if added
+        """
+        prop = CRM.P2i_is_type_of
+        prop_inverse = CRM.P2_has_type
+
+        return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
+
+
+class Measurement_Unit(Type):
+    """E58 Measurement Unit
+
+    subClassOf E55 Type
+
+    No specialized properties.
+    """
+
+    class_uri = cidoc_ns + "E58_Measurement_Unit"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
