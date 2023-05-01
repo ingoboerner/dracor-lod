@@ -6,6 +6,7 @@ import logging
 from rdflib import Namespace, URIRef, Literal, XSD
 from entity import Entity
 
+# this should be CIDOCNAMESPACE
 cidoc_ns = "http://www.cidoc-crm.org/cidoc-crm/"
 CRM = Namespace(cidoc_ns)
 
@@ -143,11 +144,23 @@ class CRM_Entity(Entity):
         return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
 
 
-class Thing(CRM_Entity):
+class Persistent_Item(CRM_Entity):
+    """E77 Persistent Item
+
+    SubClassOf E1 CRM Entity
+
+    The class E77 Persistent Item does not have any specialized properties.
+    """
+    class_uri = cidoc_ns + "E77_Persistent_Item"
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+
+class Thing(Persistent_Item):
     """E70 Thing
 
-    SubClassOf E77_Persistent_Item <- CRM Entity
-    The class Persistent Item is not implemented (E77 does not have any specialized properties).
+    SubClassOf E77_Persistent_Item
 
     P43 has dimension (is dimension of): E54 Dimension
     P101 had as general use (was use of): E55 Type
@@ -331,21 +344,17 @@ class Propositional_Object(Conceptual_Object):
 
         return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
 
-class Symbolic_Object(Conceptual_Object):
-    """E90 Symbolic Object
 
-    SubClassOf E28 Conceptual Object AND E72 Legal Object (not implemented).
-    The properties from E72 Legal Object are implemented here.
+class Legal_Object(Thing):
+    """E72 Legal Object
+
+    SubClassOf E70 Thing
 
     P104 is subject to (applies to): E30 Right [inherited from E72 Legal Object]
     P105 right held by (has right on): E39 Actor [inherited from E72 Legal Object]
-
-    P106 is composed of (forms part of): E90 Symbolic Object
-    P190 has symbolic content: E62 String
-
     """
 
-    class_uri = cidoc_ns + "E90_Symbolic_Object"
+    class_uri = cidoc_ns + "E72_Legal_Object"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -379,6 +388,21 @@ class Symbolic_Object(Conceptual_Object):
         prop_inverse = CRM.P105i_has_right_on
 
         return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
+
+
+class Symbolic_Object(Conceptual_Object, Legal_Object):
+    """E90 Symbolic Object
+
+    SubClassOf E28 Conceptual Object AND E72 Legal Object.
+
+    P106 is composed of (forms part of): E90 Symbolic Object
+    P190 has symbolic content: E62 String
+    """
+
+    class_uri = cidoc_ns + "E90_Symbolic_Object"
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
 
     def is_composed_of(self, *entities, uris: list = None) -> bool:
         """P106 is composed of (forms part of): E90 Symbolic Object
@@ -492,8 +516,6 @@ class Design_or_Procedure(Information_Object):
         return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
 
 
-
-
 class Linguistic_Object(Information_Object):
     """E33 Linguistic Object
 
@@ -597,7 +619,7 @@ class Identifier(Appellation):
 
 
 # Title
-#class Title()
+# TODO: class Title()
 
 class Type(Conceptual_Object):
     """E55 Type
@@ -709,6 +731,37 @@ class Type(Conceptual_Object):
         """
         prop = CRM.P125i_was_type_of_object_used_in
         prop_inverse = CRM.P125_used_object_of_type
+
+        return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
+
+
+class Language(Type):
+    """E56 Language
+
+    subClassOf E55 Type
+
+    No specialized properties.
+
+    Inverse: P72i_is_language_of (has language): E33 Linguistic Object
+    """
+
+    class_uri = cidoc_ns + "E56_Language"
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+    def is_language_of(self, *entities, uris: list = None) -> bool:
+        """P72i is language of (has language): E33 Linguistic Object
+
+        Args:
+            *entities (optional): Any number of instances of an Entity class
+            uris (list, optional): List of URIs of entities that identify this
+
+        Returns:
+             bool: True if added
+        """
+        prop = CRM.P72i_is_language_of
+        prop_inverse = CRM.P72_has_language
 
         return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
 
@@ -1142,4 +1195,123 @@ class Dimension(CRM_Entity):
         return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
 
 
-# E39 Actor !
+class Actor(Persistent_Item):
+    """E39 Actor
+
+    SubClassOf E77 Persistent Item
+
+    P74 has current or former residence (is current or former residence of): E53 Place
+    P75 possesses (is possessed by): E30 Right
+    P76 has contact point (provides access to): E41 Appellation
+    """
+    class_uri = cidoc_ns + "E39_Actor"
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+    def has_current_or_former_residence(self, *entities, uris: list = None) -> bool:
+        """P74 has current or former residence (is current or former residence of): E53 Place
+
+        Args:
+            *entities (optional): Any number of instances of an Entity class
+            uris (list, optional): List of URIs of entities that identify this
+
+        Returns:
+             bool: True if added
+        """
+        prop = CRM.P74_has_current_or_former_residence
+        prop_inverse = CRM.P74i_is_current_or_former_residence_of
+
+        return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
+
+    def possesses(self, *entities, uris: list = None) -> bool:
+        """P75 possesses (is possessed by): E30 Right
+
+        Args:
+            *entities (optional): Any number of instances of an Entity class
+            uris (list, optional): List of URIs of entities that identify this
+
+        Returns:
+             bool: True if added
+        """
+        prop = CRM.P75_possesses
+        prop_inverse = CRM.P75i_is_possessed_by
+
+        return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
+
+    def has_contact_point(self, *entities, uris: list = None) -> bool:
+        """P76 has contact point (provides access to): E41 Appellation
+
+        Args:
+            *entities (optional): Any number of instances of an Entity class
+            uris (list, optional): List of URIs of entities that identify this
+
+        Returns:
+             bool: True if added
+        """
+        prop = CRM.P76_has_contact_point
+        prop_inverse = CRM.P76i_provides_access_to
+
+        return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
+
+
+class Group(Actor):
+    """E74 Group
+
+    SubClassOf E39 Actor
+
+    P107 has current or former member (is current or former member of): E39 Actor
+    (P107.1 kind of member: E55 Type) [Not implemented]
+    """
+
+    class_uri = cidoc_ns + "E74_Group"
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+    def has_current_or_former_member(self, *entities, uris: list = None) -> bool:
+        """P107 has current or former member (is current or former member of): E39 Actor
+
+        Args:
+            *entities (optional): Any number of instances of an Entity class
+            uris (list, optional): List of URIs of entities that identify this
+
+        Returns:
+             bool: True if added
+        """
+        prop = CRM.P107_has_current_or_former_member
+        prop_inverse = CRM.P107i_is_current_or_former_member_of
+
+        return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
+
+
+class Physical_Thing(Legal_Object):
+    """
+    E18 Physical Thing
+
+    SubClassOf E72 Legal Object
+
+    P44 has condition (is condition of): Ε3 Condition State [Not implemented]
+    P45 consists of (is incorporated in): E57 Material [Not implemented]
+    P46 is composed of (forms part of): E18 Physical Thing [Not implemented]
+    P49 has former or current keeper (is former or current keeper of): E39 Actor [Not implemented]
+    P50 has current keeper (is current keeper of): E39 Actor [Not implemented]
+    P51 has former or current owner (is former or current owner of): E39 Actor [Not implemented]
+    P52 has current owner (is current owner of): E39 Actor [Not implemented]
+    P53 has former or current location (is former or current location of): E53 Place [Not implemented]
+    P59 has section (is located on or within): E53 Place [Not implemented]
+    P128 carries (is carried by): E90 Symbolic Object [Not implemented]
+    P156 occupies (is occupied by): E53 Place [Not implemented]
+    P196 defines (is defined by): E92 Spacetime Volume [Not implemented]
+
+    TODO: implement
+    """
+
+# E19 Physical Object (E18)
+
+# E20 Biological Object
+
+# E21 Person
+
+
+# E30 Right?
