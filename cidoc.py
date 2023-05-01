@@ -3,7 +3,7 @@ in between that have not been implemented.
 
 """
 import logging
-from rdflib import Namespace, URIRef, Literal
+from rdflib import Namespace, URIRef, Literal, XSD
 from entity import Entity
 
 cidoc_ns = "http://www.cidoc-crm.org/cidoc-crm/"
@@ -19,6 +19,9 @@ class CRM_Entity(Entity):
     P48 has preferred identifier (is preferred identifier of): E42 Identifier
     P137 exemplifies (is exemplified by): E55 Type
     (P137.1 in the taxonomic role: E55 Type) [Not implemented]
+
+    Inverse: P140i was attributed by (assigned attribute to): E13 Attribute Assignment
+    P141i was assigned by (assigned): E13 Attribute Assignment
     """
 
     class_uri = cidoc_ns + "E1_CRM_Entity"
@@ -109,6 +112,36 @@ class CRM_Entity(Entity):
 
         return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
 
+    def was_attributed_by(self, *entities, uris: list = None) -> bool:
+        """P140i was attributed by (assigned attribute to): E13 Attribute Assignment
+
+        Args:
+            *entities (optional): Any number of instances of an Entity class
+            uris (list, optional): List of URIs of entities that identify this
+
+        Returns:
+             bool: True if added
+        """
+        prop = CRM.P140i_was_attributed_by
+        prop_inverse = CRM.P140_assigned_attribute_to
+
+        return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
+
+    def was_assigned_by(self, *entities, uris: list = None) -> bool:
+        """P141i was assigned by (assigned): E13 Attribute Assignment
+
+        Args:
+            *entities (optional): Any number of instances of an Entity class
+            uris (list, optional): List of URIs of entities that identify this
+
+        Returns:
+             bool: True if added
+        """
+        prop = CRM.P141i_was_assigned_by
+        prop_inverse = CRM.P141_assigned
+
+        return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
+
 
 class Thing(CRM_Entity):
     """E70 Thing
@@ -120,6 +153,8 @@ class Thing(CRM_Entity):
     P101 had as general use (was use of): E55 Type
     P130 shows features of (features are also found on): E70 Thing
     (P130.1 kind of similarity: E55 Type) [Not implemented]
+
+    Inverse: P16i was used for (used specific object): E7 Activity
     """
     class_uri = cidoc_ns + "E70_Thing"
 
@@ -168,6 +203,21 @@ class Thing(CRM_Entity):
         """
         prop = CRM.P130_shows_features_of
         prop_inverse = CRM.P130i_features_are_also_found_on
+
+        return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
+
+    def was_used_for(self, *entities, uris: list = None) -> bool:
+        """P16i was used for (used specific object): E7 Activity
+
+        Args:
+            *entities (optional): Any number of instances of an Entity class
+            uris (list, optional): List of URIs of entities that identify this
+
+        Returns:
+             bool: True if added
+        """
+        prop = CRM.P16i_was_used_for
+        prop_inverse = CRM.P16_used_specific_object
 
         return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
 
@@ -404,6 +454,7 @@ class Design_or_Procedure(Information_Object):
     P69 has association with (is associated with): E29 Design or Procedure
     (P69.1 has type: E55 Type) [Not implemented]
 
+    Inverse: P33 used specific technique (was used by): E29 Design or Procedure
     """
     class_uri = cidoc_ns + "E29_Design_or_Procedure"
 
@@ -424,6 +475,23 @@ class Design_or_Procedure(Information_Object):
         prop_inverse = CRM.P69i_is_associated_with
 
         return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
+
+    def was_used_by(self, *entities, uris: list = None) -> bool:
+        """P33i was used by (used specific technique): E7 Activity
+
+        Args:
+            *entities (optional): Any number of instances of an Entity class
+            uris (list, optional): List of URIs of entities that identify this
+
+        Returns:
+             bool: True if added
+        """
+        prop = CRM.P33i_was_used_by
+        prop_inverse = CRM.P33_used_specific_technique
+
+        return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
+
+
 
 
 class Linguistic_Object(Information_Object):
@@ -540,6 +608,7 @@ class Type(Conceptual_Object):
     P150 defines typical parts of (define typical wholes for): E55 Type
 
     Implemented inverse: P2i is type of: E1 CRM Entity
+    P125i was type of object used in (used object of type) E7 Activity
     """
 
     class_uri = cidoc_ns + "E55_Type"
@@ -625,6 +694,21 @@ class Type(Conceptual_Object):
         """
         prop = CRM.P2i_is_type_of
         prop_inverse = CRM.P2_has_type
+
+        return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
+
+    def was_type_of_object_used_in(self, *entities, uris: list = None) -> bool:
+        """P125i was type of object used in (used object of type) E7 Activity
+
+        Args:
+            *entities (optional): Any number of instances of an Entity class
+            uris (list, optional): List of URIs of entities that identify this
+
+        Returns:
+             bool: True if added
+        """
+        prop = CRM.P125i_was_type_of_object_used_in
+        prop_inverse = CRM.P125_used_object_of_type
 
         return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
 
@@ -755,7 +839,7 @@ class Event(Period):
 
         return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
 
-    def had_participant(self, *entities, uris: list = None) -> bool:
+    def occurred_in_the_presence_of(self, *entities, uris: list = None) -> bool:
         """P12 occurred in the presence of (was present at): E77 Persistent Item
 
         Args:
@@ -772,12 +856,14 @@ class Event(Period):
 
 
 class Activity(Event):
-    """E7_Activity
+    """E7 Activity
 
     SubClassOf E5 Event
 
-    P14 carried out by (performed): E39 Actor (P14.1 in the role of: E55 Type)
-    P15 was influenced by (influenced): E1 CRM Entity P16 used specific object (was used for): E70 Thing
+    P14 carried out by (performed): E39 Actor
+    (P14.1 in the role of: E55 Type) [Not implemented]
+    P15 was influenced by (influenced): E1 CRM Entity
+    P16 used specific object (was used for): E70 Thing
     (P16.1 mode of use: E55 Type) [Not implemented]
     P17 was motivated by (motivated): E1 CRM Entity
     P19 was intended use of (was made for): E71 Human-Made Thing
@@ -787,8 +873,6 @@ class Activity(Event):
     P32 used general technique (was technique of): E55 Type
     P33 used specific technique (was used by): E29 Design or Procedure
     P125 used object of type (was type of object used in): E55 Type
-
-    TODO: implement
     """
 
     class_uri = cidoc_ns + "E7_Activity"
@@ -796,17 +880,216 @@ class Activity(Event):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
+    def carried_out_by(self, *entities, uris: list = None) -> bool:
+        """P14 carried out by (performed): E39 Actor
+
+        Args:
+            *entities (optional): Any number of instances of an Entity class
+            uris (list, optional): List of URIs of entities that identify this
+
+        Returns:
+             bool: True if added
+        """
+        prop = CRM.P14_carried_out_by
+        prop_inverse = CRM.P14i_performed
+
+        return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
+
+    def was_influenced_by(self, *entities, uris: list = None) -> bool:
+        """P15 was influenced by (influenced): E1 CRM Entity
+
+        Args:
+            *entities (optional): Any number of instances of an Entity class
+            uris (list, optional): List of URIs of entities that identify this
+
+        Returns:
+             bool: True if added
+        """
+        prop = CRM.P15_was_influenced_by
+        prop_inverse = CRM.P15i_influenced
+
+        return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
+
+    def used_specific_object(self, *entities, uris: list = None) -> bool:
+        """P16 used specific object (was used for): E70 Thing
+
+        Args:
+            *entities (optional): Any number of instances of an Entity class
+            uris (list, optional): List of URIs of entities that identify this
+
+        Returns:
+             bool: True if added
+        """
+        prop = CRM.P16_used_specific_object
+        prop_inverse = CRM.P16i_was_used_for
+
+        return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
+
+    def was_motivated_by(self, *entities, uris: list = None) -> bool:
+        """P17 was motivated by (motivated): E1 CRM Entity
+
+        Args:
+            *entities (optional): Any number of instances of an Entity class
+            uris (list, optional): List of URIs of entities that identify this
+
+        Returns:
+             bool: True if added
+        """
+        prop = CRM.P17_was_motivated_by
+        prop_inverse = CRM.P17i_motivated
+
+        return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
+
+    def was_intended_use_of(self, *entities, uris: list = None) -> bool:
+        """P19 was intended use of (was made for): E71 Human-Made Thing
+
+        Args:
+            *entities (optional): Any number of instances of an Entity class
+            uris (list, optional): List of URIs of entities that identify this
+
+        Returns:
+             bool: True if added
+        """
+        prop = CRM.P19_was_intended_use_of
+        prop_inverse = CRM.P19i_was_made_for
+
+        return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
+
+    def had_specific_purpose(self, *entities, uris: list = None) -> bool:
+        """P20 had specific purpose (was purpose of): E5 Event
+
+        Args:
+            *entities (optional): Any number of instances of an Entity class
+            uris (list, optional): List of URIs of entities that identify this
+
+        Returns:
+             bool: True if added
+        """
+        prop = CRM.P20_had_specific_purpose
+        prop_inverse = CRM.P20i_was_purpose_of
+
+        return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
+
+    def had_general_purpose(self, *entities, uris: list = None) -> bool:
+        """P21 had general purpose (was purpose of): E55 Type
+
+        Args:
+            *entities (optional): Any number of instances of an Entity class
+            uris (list, optional): List of URIs of entities that identify this
+
+        Returns:
+             bool: True if added
+        """
+        prop = CRM.P21_had_general_purpose
+        prop_inverse = CRM.P21i_was_purpose_of
+
+        return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
+
+    def used_general_technique(self, *entities, uris: list = None) -> bool:
+        """P32 used general technique (was technique of): E55 Type
+
+        Args:
+            *entities (optional): Any number of instances of an Entity class
+            uris (list, optional): List of URIs of entities that identify this
+
+        Returns:
+             bool: True if added
+        """
+        prop = CRM.P32_used_general_technique
+        prop_inverse = CRM.P32i_was_technique_of
+
+        return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
+
+    def used_specific_technique(self, *entities, uris: list = None) -> bool:
+        """P33 used specific technique (was used by): E29 Design or Procedure
+
+        Args:
+            *entities (optional): Any number of instances of an Entity class
+            uris (list, optional): List of URIs of entities that identify this
+
+        Returns:
+             bool: True if added
+        """
+        prop = CRM.P33_used_specific_technique
+        prop_inverse = CRM.P33i_was_used_by
+
+        return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
+
+    def used_object_of_type(self, *entities, uris: list = None) -> bool:
+        """P125 used object of type (was type of object used in): E55 Type
+
+        Args:
+            *entities (optional): Any number of instances of an Entity class
+            uris (list, optional): List of URIs of entities that identify this
+
+        Returns:
+             bool: True if added
+        """
+        prop = CRM.P125_used_object_of_type
+        prop_inverse = CRM.P125i_was_type_of_object_used_in
+
+        return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
+
 
 class Attribute_Assginment(Activity):
-    """E13 Attribute Assginment
+    """E13 Attribute Assignment
 
-    TODO: implement
+    SubClassOf E7 Activity
+
+    P140 assigned attribute to (was attributed by): E1 CRM Entity
+    P141 assigned (was assigned by): E1 CRM Entity
+    P177 assigned property type E55 Type
     """
 
     class_uri = cidoc_ns + "E13_Attribute_Assignment"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+
+    def assigned_attribute_to(self, *entities, uris: list = None) -> bool:
+        """P140 assigned attribute to (was attributed by): E1 CRM Entity
+
+        Args:
+            *entities (optional): Any number of instances of an Entity class
+            uris (list, optional): List of URIs of entities that identify this
+
+        Returns:
+             bool: True if added
+        """
+        prop = CRM.P140_assigned_attribute_to
+        prop_inverse = CRM.P140i_was_attributed_by
+
+        return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
+
+    def assigned(self, *entities, uris: list = None) -> bool:
+        """P141 assigned (was assigned by): E1 CRM Entity
+
+        Args:
+            *entities (optional): Any number of instances of an Entity class
+            uris (list, optional): List of URIs of entities that identify this
+
+        Returns:
+             bool: True if added
+        """
+        prop = CRM.P141_assigned
+        prop_inverse = CRM.P141i_was_assigned_by
+
+        return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
+
+    def assigned_property_of_type(self, *entities, uris: list = None) -> bool:
+        """P177 assigned property of type: E55 Type
+
+        Args:
+            *entities (optional): Any number of instances of an Entity class
+            uris (list, optional): List of URIs of entities that identify this
+
+        Returns:
+             bool: True if added
+        """
+        prop = CRM.P177_assigned_property_of_type
+        prop_inverse = CRM.P177i_is_type_of_property_assigned
+
+        return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
 
 
 class Dimension(CRM_Entity):
@@ -816,14 +1099,47 @@ class Dimension(CRM_Entity):
 
     P90 has value: E60 Number
     P91 has unit (is unit of): E58 Measurement Unit
-
-    TODO: implement
     """
 
     class_uri = cidoc_ns + "E54_Dimension"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+
+    def has_value(self, content: str, datatype: str = None) -> bool:
+        """P90 has value: E60 Number
+
+        Args:
+            content (str): Textual content of the note
+            datatype (str, optional): Datatype that will be added to Literal. Use XSD datatypes.
+
+        Returns:
+             bool: True if added
+        """
+        prop = CRM.P90_has_value
+
+        if datatype:
+            datatype_uri = XSD[datatype]
+            self.graph.add((URIRef(self.uri), prop, Literal(content, datatype=datatype_uri)))
+        else:
+            self.graph.add((URIRef(self.uri), prop, Literal(content)))
+
+        return True
+
+    def has_unit(self, *entities, uris: list = None) -> bool:
+        """P91 has unit (is unit of): E58 Measurement Unit
+
+        Args:
+            *entities (optional): Any number of instances of an Entity class
+            uris (list, optional): List of URIs of entities that identify this
+
+        Returns:
+             bool: True if added
+        """
+        prop = CRM.P91_has_unit
+        prop_inverse = CRM.P91i_is_unit_of
+
+        return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
 
 
 # E39 Actor !
