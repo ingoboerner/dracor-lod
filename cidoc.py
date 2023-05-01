@@ -7,11 +7,11 @@ from rdflib import Namespace, URIRef, Literal, XSD
 from entity import Entity
 
 # this should be CIDOCNAMESPACE
-cidoc_ns = "http://www.cidoc-crm.org/cidoc-crm/"
-CRM = Namespace(cidoc_ns)
+CIDOCNAMESPACE = "http://www.cidoc-crm.org/cidoc-crm/"
+CRM = Namespace(CIDOCNAMESPACE)
 
 
-class CRM_Entity(Entity):
+class E1CRMEntity(Entity):
     """ E1 CRM Entity
 
     P1 is identified by (identifies): E41 Appellation P2 has type (is type of): E55 Type
@@ -25,12 +25,12 @@ class CRM_Entity(Entity):
     P141i was assigned by (assigned): E13 Attribute Assignment
     """
 
-    class_uri = cidoc_ns + "E1_CRM_Entity"
+    class_uri = CIDOCNAMESPACE + "E1_CRM_Entity"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-    def is_identified_by(self, *entities, uris: list = None) -> bool:
+    def p1_is_identified_by(self, *entities, uris: list = None) -> bool:
         """P1 is identified by (identifies): E41 Appellation
 
         Add triples "P1 is identified by" and inverse to the self.graph either for each passed entity
@@ -49,7 +49,7 @@ class CRM_Entity(Entity):
 
         return self.add_triples(entities=list(entities), uris=uris, prop=prop, prop_inverse=prop_inverse)
 
-    def has_type(self, *entities, uris: list = None) -> bool:
+    def p2_has_type(self, *entities, uris: list = None) -> bool:
         """P2 has type (is type of): E55 Type
 
         Args:
@@ -64,7 +64,7 @@ class CRM_Entity(Entity):
 
         return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
 
-    def has_note(self, content: str, lang: str = None) -> bool:
+    def p3_has_note(self, content: str, lang: str = None) -> bool:
         """P3 has note: E62 String
 
         Args:
@@ -83,7 +83,7 @@ class CRM_Entity(Entity):
 
         return True
 
-    def has_preferred_identifier(self, *entities, uris: list = None) -> bool:
+    def p48_has_preferred_identifier(self, *entities, uris: list = None) -> bool:
         """P48 has preferred identifier (is preferred identifier of): E42 Identifier
 
         Args:
@@ -98,7 +98,7 @@ class CRM_Entity(Entity):
 
         return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
 
-    def exemplifies(self, *entities, uris: list = None) -> bool:
+    def p137_exemplifies(self, *entities, uris: list = None) -> bool:
         """P137 exemplifies( is exemplified by): E55 Type
 
         Args:
@@ -113,7 +113,7 @@ class CRM_Entity(Entity):
 
         return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
 
-    def was_attributed_by(self, *entities, uris: list = None) -> bool:
+    def p140i_was_attributed_by(self, *entities, uris: list = None) -> bool:
         """P140i was attributed by (assigned attribute to): E13 Attribute Assignment
 
         Args:
@@ -128,7 +128,7 @@ class CRM_Entity(Entity):
 
         return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
 
-    def was_assigned_by(self, *entities, uris: list = None) -> bool:
+    def p141i_was_assigned_by(self, *entities, uris: list = None) -> bool:
         """P141i was assigned by (assigned): E13 Attribute Assignment
 
         Args:
@@ -144,20 +144,20 @@ class CRM_Entity(Entity):
         return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
 
 
-class Persistent_Item(CRM_Entity):
+class E77PersistentItem(E1CRMEntity):
     """E77 Persistent Item
 
     SubClassOf E1 CRM Entity
 
     The class E77 Persistent Item does not have any specialized properties.
     """
-    class_uri = cidoc_ns + "E77_Persistent_Item"
+    class_uri = CIDOCNAMESPACE + "E77_Persistent_Item"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
 
-class Thing(Persistent_Item):
+class E70Thing(E77PersistentItem):
     """E70 Thing
 
     SubClassOf E77_Persistent_Item
@@ -169,12 +169,12 @@ class Thing(Persistent_Item):
 
     Inverse: P16i was used for (used specific object): E7 Activity
     """
-    class_uri = cidoc_ns + "E70_Thing"
+    class_uri = CIDOCNAMESPACE + "E70_Thing"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-    def has_dimension(self, *entities, uris: list = None) -> bool:
+    def p43_has_dimension(self, *entities, uris: list = None) -> bool:
         """P43 has dimension (is dimension of): E54 Dimension
 
         Args:
@@ -189,7 +189,7 @@ class Thing(Persistent_Item):
 
         return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
 
-    def had_as_general_use(self, *entities, uris: list = None) -> bool:
+    def p101_had_as_general_use(self, *entities, uris: list = None) -> bool:
         """P101 had as general use (was use of): E55 Type
 
         Args:
@@ -204,7 +204,7 @@ class Thing(Persistent_Item):
 
         return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
 
-    def shows_features_of(self, *entities, uris: list = None) -> bool:
+    def p130_shows_features_of(self, *entities, uris: list = None) -> bool:
         """P130 shows features of (features are also found on): E70 Thing
 
         Args:
@@ -219,7 +219,7 @@ class Thing(Persistent_Item):
 
         return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
 
-    def was_used_for(self, *entities, uris: list = None) -> bool:
+    def p16i_was_used_for(self, *entities, uris: list = None) -> bool:
         """P16i was used for (used specific object): E7 Activity
 
         Args:
@@ -235,7 +235,7 @@ class Thing(Persistent_Item):
         return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
 
 
-class Conceptual_Object(Thing):
+class E28ConceptualObject(E70Thing):
     """E28 Conceptual Object
 
     SubClassOf E71 Human-Made Thing <- E70 Thing
@@ -247,12 +247,12 @@ class Conceptual_Object(Thing):
     P103 was intended for (was intention of): E55 Type [originally inherited from E71]
     """
 
-    class_uri = cidoc_ns + "E28_Conceptual_Object"
+    class_uri = CIDOCNAMESPACE + "E28_Conceptual_Object"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-    def has_title(self, *entities, uris: list = None) -> bool:
+    def p102_has_title(self, *entities, uris: list = None) -> bool:
         """P102 has title (is title of): E35 Title [originally inherited from E71]
 
         Args:
@@ -267,7 +267,7 @@ class Conceptual_Object(Thing):
 
         return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
 
-    def was_intended_for(self, *entities, uris: list = None) -> bool:
+    def p103_was_intended_for(self, *entities, uris: list = None) -> bool:
         """P103 was intended for (was intention of): E55 Type [originally inherited from E71]
 
         Args:
@@ -283,7 +283,7 @@ class Conceptual_Object(Thing):
         return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
 
 
-class Propositional_Object(Conceptual_Object):
+class E89PropositionalObject(E28ConceptualObject):
     """E89 Propositional Object
 
     SubClassOf E28 Conceptual Object
@@ -294,12 +294,12 @@ class Propositional_Object(Conceptual_Object):
     P129 is about (is subject of): E1 CRM Entity
     """
 
-    class_uri = cidoc_ns + "E89_Propositional_Object"
+    class_uri = CIDOCNAMESPACE + "E89_Propositional_Object"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-    def has_component(self, *entities, uris: list = None) -> bool:
+    def p148_has_component(self, *entities, uris: list = None) -> bool:
         """P148 has component (is component of): E89 Propositional Object
 
         Args:
@@ -314,7 +314,7 @@ class Propositional_Object(Conceptual_Object):
 
         return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
 
-    def refers_to(self, *entities, uris: list = None) -> bool:
+    def p67_refers_to(self, *entities, uris: list = None) -> bool:
         """P67 refers to (is referred to by): E1 CRM Entity
 
         Args:
@@ -329,7 +329,7 @@ class Propositional_Object(Conceptual_Object):
 
         return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
 
-    def is_about(self, *entities, uris: list = None) -> bool:
+    def p129_is_about(self, *entities, uris: list = None) -> bool:
         """P129 is about (is subject of): E1 CRM Entity
 
         Args:
@@ -345,7 +345,7 @@ class Propositional_Object(Conceptual_Object):
         return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
 
 
-class Legal_Object(Thing):
+class E72LegalObject(E70Thing):
     """E72 Legal Object
 
     SubClassOf E70 Thing
@@ -354,12 +354,12 @@ class Legal_Object(Thing):
     P105 right held by (has right on): E39 Actor [inherited from E72 Legal Object]
     """
 
-    class_uri = cidoc_ns + "E72_Legal_Object"
+    class_uri = CIDOCNAMESPACE + "E72_Legal_Object"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-    def is_subject_to(self, *entities, uris: list = None) -> bool:
+    def p104_is_subject_to(self, *entities, uris: list = None) -> bool:
         """P104 is subject to (applies to): E30 Right [inherited from E72 Legal Object]
 
         Args:
@@ -374,7 +374,7 @@ class Legal_Object(Thing):
 
         return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
 
-    def right_held_by(self, *entities, uris: list = None) -> bool:
+    def p105_ight_held_by(self, *entities, uris: list = None) -> bool:
         """P105 right held by (has right on): E39 Actor [inherited from E72 Legal Object]
 
         Args:
@@ -390,7 +390,7 @@ class Legal_Object(Thing):
         return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
 
 
-class Symbolic_Object(Conceptual_Object, Legal_Object):
+class E90SymbolicObject(E28ConceptualObject, E72LegalObject):
     """E90 Symbolic Object
 
     SubClassOf E28 Conceptual Object AND E72 Legal Object.
@@ -399,12 +399,12 @@ class Symbolic_Object(Conceptual_Object, Legal_Object):
     P190 has symbolic content: E62 String
     """
 
-    class_uri = cidoc_ns + "E90_Symbolic_Object"
+    class_uri = CIDOCNAMESPACE + "E90_Symbolic_Object"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-    def is_composed_of(self, *entities, uris: list = None) -> bool:
+    def p106_is_composed_of(self, *entities, uris: list = None) -> bool:
         """P106 is composed of (forms part of): E90 Symbolic Object
 
         Args:
@@ -419,7 +419,7 @@ class Symbolic_Object(Conceptual_Object, Legal_Object):
 
         return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
 
-    def has_symbolic_content(self, content: str, lang: str = None) -> bool:
+    def p190_has_symbolic_content(self, content: str, lang: str = None) -> bool:
         """P190 has symbolic content: E62 String
 
         Args:
@@ -439,7 +439,7 @@ class Symbolic_Object(Conceptual_Object, Legal_Object):
         return True
 
 
-class Information_Object(Symbolic_Object, Propositional_Object):
+class E73InformationObject(E90SymbolicObject, E89PropositionalObject):
     """E73 Information Object
 
     SubClassOf E90 Symbolic Object AND E89 Propositional Object
@@ -448,12 +448,12 @@ class Information_Object(Symbolic_Object, Propositional_Object):
 
     """
 
-    class_uri = cidoc_ns + "E73_Information_Object"
+    class_uri = CIDOCNAMESPACE + "E73_Information_Object"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-    def incorporates(self, *entities, uris: list = None) -> bool:
+    def p165_incorporates(self, *entities, uris: list = None) -> bool:
         """P165 incorporates (is incorporated in): E90 Symbolic Object
 
         Args:
@@ -469,7 +469,7 @@ class Information_Object(Symbolic_Object, Propositional_Object):
         return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
 
 
-class Design_or_Procedure(Information_Object):
+class E29DesignOrProcedure(E73InformationObject):
     """E29 Design or Procedure
 
     subClassOf E73 Information Object
@@ -480,12 +480,12 @@ class Design_or_Procedure(Information_Object):
 
     Inverse: P33 used specific technique (was used by): E29 Design or Procedure
     """
-    class_uri = cidoc_ns + "E29_Design_or_Procedure"
+    class_uri = CIDOCNAMESPACE + "E29_Design_or_Procedure"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-    def has_association_with(self, *entities, uris: list = None) -> bool:
+    def p69_has_association_with(self, *entities, uris: list = None) -> bool:
         """P69 has association with (is associated with): E29 Design or Procedure
 
         Args:
@@ -500,7 +500,7 @@ class Design_or_Procedure(Information_Object):
 
         return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
 
-    def was_used_by(self, *entities, uris: list = None) -> bool:
+    def p33i_was_used_by(self, *entities, uris: list = None) -> bool:
         """P33i was used by (used specific technique): E7 Activity
 
         Args:
@@ -516,7 +516,7 @@ class Design_or_Procedure(Information_Object):
         return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
 
 
-class Linguistic_Object(Information_Object):
+class E33LinguisticObject(E73InformationObject):
     """E33 Linguistic Object
 
     subClassOf E73 Information Object
@@ -525,12 +525,12 @@ class Linguistic_Object(Information_Object):
     P73 has translation (is translation of): E33 Linguistic Object
     """
 
-    class_uri = cidoc_ns + "E33_Linguistic_Object"
+    class_uri = CIDOCNAMESPACE + "E33_Linguistic_Object"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-    def has_language(self, *entities, uris: list = None) -> bool:
+    def p72_has_language(self, *entities, uris: list = None) -> bool:
         """P72 has language (is language of): E56 Language
 
         Args:
@@ -545,7 +545,7 @@ class Linguistic_Object(Information_Object):
 
         return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
 
-    def has_translation(self, *entities, uris: list = None) -> bool:
+    def p73_has_translation(self, *entities, uris: list = None) -> bool:
         """P73 has translation (is translation of): E33 Linguistic Object
 
         Args:
@@ -561,7 +561,7 @@ class Linguistic_Object(Information_Object):
         return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
 
 
-class Appellation(Symbolic_Object):
+class E41Appellation(E90SymbolicObject):
     """E41 Appellation
 
     subClassOf E90 Symbolic Object
@@ -570,12 +570,12 @@ class Appellation(Symbolic_Object):
     Implemented inverse: P1i_identifies: E1 CRM Entity
     """
 
-    class_uri = cidoc_ns + "E41_Appellation"
+    class_uri = CIDOCNAMESPACE + "E41_Appellation"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-    def has_alternative_form(self, *entities, uris: list = None) -> bool:
+    def p139_has_alternative_form(self, *entities, uris: list = None) -> bool:
         """P139 has alternative form: E41 Appellation
 
         Args:
@@ -590,7 +590,7 @@ class Appellation(Symbolic_Object):
 
         return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
 
-    def identifies(self, *entities, uris: list = None) -> bool:
+    def p1i_identifies(self, *entities, uris: list = None) -> bool:
         """P1i identifies (is identified by): E1 CRM Entity
 
         Args:
@@ -606,13 +606,15 @@ class Appellation(Symbolic_Object):
         return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
 
 
-class Identifier(Appellation):
+class E42Identifier(E41Appellation):
     """E42 Identifier
+
+    SubClassOf E41 Appellation
 
     No specialized properties.
     """
 
-    class_uri = cidoc_ns + "E42_Identifier"
+    class_uri = CIDOCNAMESPACE + "E42_Identifier"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -621,7 +623,7 @@ class Identifier(Appellation):
 # Title
 # TODO: class Title()
 
-class Type(Conceptual_Object):
+class E55Type(E28ConceptualObject):
     """E55 Type
 
     SubClassOf E28 Conceptual Object
@@ -633,12 +635,12 @@ class Type(Conceptual_Object):
     P125i was type of object used in (used object of type) E7 Activity
     """
 
-    class_uri = cidoc_ns + "E55_Type"
+    class_uri = CIDOCNAMESPACE + "E55_Type"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-    def has_broader_term(self, *entities, uris: list = None) -> bool:
+    def p127_has_broader_term(self, *entities, uris: list = None) -> bool:
         """P127 has broader term (has narrower term): E55 Type
 
         Implemented in both directions, see self.has_broader_term
@@ -655,7 +657,7 @@ class Type(Conceptual_Object):
 
         return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
 
-    def has_narrower_term(self, *entities, uris: list = None) -> bool:
+    def p127i_has_narrower_term(self, *entities, uris: list = None) -> bool:
         """P127i has narrower term (has broader term): E55 Type
 
         Implemented in both directions, see self.has_broader_term
@@ -672,7 +674,7 @@ class Type(Conceptual_Object):
 
         return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
 
-    def defines_typical_parts_of(self, *entities, uris: list = None) -> bool:
+    def p150_defines_typical_parts_of(self, *entities, uris: list = None) -> bool:
         """P150 defines typical parts of (defines typical wholes for): E55 Type
 
         Args:
@@ -687,7 +689,7 @@ class Type(Conceptual_Object):
 
         return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
 
-    def defines_typical_wholes_for(self, *entities, uris: list = None) -> bool:
+    def p150i_defines_typical_wholes_for(self, *entities, uris: list = None) -> bool:
         """P150i defines typical wholes for (defines typical parts of): E55 Type
 
         Args:
@@ -702,7 +704,7 @@ class Type(Conceptual_Object):
 
         return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
 
-    def is_type_of(self, *entities, uris: list = None) -> bool:
+    def p2i_is_type_of(self, *entities, uris: list = None) -> bool:
         """P2i is type of (has type): E1 CRM Entity
 
         Implemented in both directions, see self.has_type
@@ -719,7 +721,7 @@ class Type(Conceptual_Object):
 
         return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
 
-    def was_type_of_object_used_in(self, *entities, uris: list = None) -> bool:
+    def p125i_was_type_of_object_used_in(self, *entities, uris: list = None) -> bool:
         """P125i was type of object used in (used object of type) E7 Activity
 
         Args:
@@ -735,7 +737,7 @@ class Type(Conceptual_Object):
         return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
 
 
-class Language(Type):
+class E56Language(E55Type):
     """E56 Language
 
     subClassOf E55 Type
@@ -745,12 +747,12 @@ class Language(Type):
     Inverse: P72i_is_language_of (has language): E33 Linguistic Object
     """
 
-    class_uri = cidoc_ns + "E56_Language"
+    class_uri = CIDOCNAMESPACE + "E56_Language"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-    def is_language_of(self, *entities, uris: list = None) -> bool:
+    def p72i_is_language_of(self, *entities, uris: list = None) -> bool:
         """P72i is language of (has language): E33 Linguistic Object
 
         Args:
@@ -766,7 +768,7 @@ class Language(Type):
         return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
 
 
-class Measurement_Unit(Type):
+class E58MeasurementUnit(E55Type):
     """E58 Measurement Unit
 
     subClassOf E55 Type
@@ -774,13 +776,13 @@ class Measurement_Unit(Type):
     No specialized properties.
     """
 
-    class_uri = cidoc_ns + "E58_Measurement_Unit"
+    class_uri = CIDOCNAMESPACE + "E58_Measurement_Unit"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
 
-class Temporal_Entity(CRM_Entity):
+class E2TemporalEntity(E1CRMEntity):
     """E2 Temporal Entity
 
     subClassOf E1 CRM Entity
@@ -796,12 +798,12 @@ class Temporal_Entity(CRM_Entity):
     P185 ends before the end of (ends after the end of): E2 Temporal Entity [Not implemented]
 
     """
-    class_uri = cidoc_ns + "E2_Temporal_Entity"
+    class_uri = CIDOCNAMESPACE + "E2_Temporal_Entity"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-    def has_timespan(self, *entities, uris: list = None) -> bool:
+    def p4_has_timespan(self, *entities, uris: list = None) -> bool:
         """P4 has time-span (is time-span of): E52 Time-Span
 
         Args:
@@ -817,7 +819,7 @@ class Temporal_Entity(CRM_Entity):
         return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
 
 
-class Period(Temporal_Entity):
+class E4Period(E2TemporalEntity):
     """E4 Period
 
     P7 took place at (witnessed): E53 Place
@@ -828,12 +830,12 @@ class Period(Temporal_Entity):
     Cubism (Cox, 2000), ...
     """
 
-    class_uri = cidoc_ns + "E4_Period"
+    class_uri = CIDOCNAMESPACE + "E4_Period"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-    def took_place_at(self, *entities, uris: list = None) -> bool:
+    def p7_took_place_at(self, *entities, uris: list = None) -> bool:
         """P7 took place at (witnessed): E53 Place
 
         Args:
@@ -848,7 +850,7 @@ class Period(Temporal_Entity):
 
         return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
 
-    def consists_of(self, *entities, uris: list = None) -> bool:
+    def p9_consists_of(self, *entities, uris: list = None) -> bool:
         """P9 consists of (forms part of): E4 Period
 
         Args:
@@ -864,7 +866,7 @@ class Period(Temporal_Entity):
         return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
 
 
-class Event(Period):
+class E5Event(E4Period):
     """E5 Event
     SubClassOf E4 Period
 
@@ -872,12 +874,12 @@ class Event(Period):
     P12 occurred in the presence of (was present at): E77 Persistent Item
     """
 
-    class_uri = cidoc_ns + "E5_Event"
+    class_uri = CIDOCNAMESPACE + "E5_Event"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-    def had_participant(self, *entities, uris: list = None) -> bool:
+    def p11_had_participant(self, *entities, uris: list = None) -> bool:
         """P11 had participant (participated in): E39 Actor
 
         Args:
@@ -892,7 +894,7 @@ class Event(Period):
 
         return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
 
-    def occurred_in_the_presence_of(self, *entities, uris: list = None) -> bool:
+    def p12_occurred_in_the_presence_of(self, *entities, uris: list = None) -> bool:
         """P12 occurred in the presence of (was present at): E77 Persistent Item
 
         Args:
@@ -908,7 +910,7 @@ class Event(Period):
         return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
 
 
-class Activity(Event):
+class E7Activity(E5Event):
     """E7 Activity
 
     SubClassOf E5 Event
@@ -928,12 +930,12 @@ class Activity(Event):
     P125 used object of type (was type of object used in): E55 Type
     """
 
-    class_uri = cidoc_ns + "E7_Activity"
+    class_uri = CIDOCNAMESPACE + "E7_Activity"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-    def carried_out_by(self, *entities, uris: list = None) -> bool:
+    def p14_carried_out_by(self, *entities, uris: list = None) -> bool:
         """P14 carried out by (performed): E39 Actor
 
         Args:
@@ -948,7 +950,7 @@ class Activity(Event):
 
         return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
 
-    def was_influenced_by(self, *entities, uris: list = None) -> bool:
+    def p15_was_influenced_by(self, *entities, uris: list = None) -> bool:
         """P15 was influenced by (influenced): E1 CRM Entity
 
         Args:
@@ -963,7 +965,7 @@ class Activity(Event):
 
         return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
 
-    def used_specific_object(self, *entities, uris: list = None) -> bool:
+    def p16_used_specific_object(self, *entities, uris: list = None) -> bool:
         """P16 used specific object (was used for): E70 Thing
 
         Args:
@@ -978,7 +980,7 @@ class Activity(Event):
 
         return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
 
-    def was_motivated_by(self, *entities, uris: list = None) -> bool:
+    def p17_was_motivated_by(self, *entities, uris: list = None) -> bool:
         """P17 was motivated by (motivated): E1 CRM Entity
 
         Args:
@@ -993,7 +995,7 @@ class Activity(Event):
 
         return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
 
-    def was_intended_use_of(self, *entities, uris: list = None) -> bool:
+    def p19_was_intended_use_of(self, *entities, uris: list = None) -> bool:
         """P19 was intended use of (was made for): E71 Human-Made Thing
 
         Args:
@@ -1008,7 +1010,7 @@ class Activity(Event):
 
         return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
 
-    def had_specific_purpose(self, *entities, uris: list = None) -> bool:
+    def p20_had_specific_purpose(self, *entities, uris: list = None) -> bool:
         """P20 had specific purpose (was purpose of): E5 Event
 
         Args:
@@ -1023,7 +1025,7 @@ class Activity(Event):
 
         return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
 
-    def had_general_purpose(self, *entities, uris: list = None) -> bool:
+    def p21_had_general_purpose(self, *entities, uris: list = None) -> bool:
         """P21 had general purpose (was purpose of): E55 Type
 
         Args:
@@ -1038,7 +1040,7 @@ class Activity(Event):
 
         return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
 
-    def used_general_technique(self, *entities, uris: list = None) -> bool:
+    def p32_used_general_technique(self, *entities, uris: list = None) -> bool:
         """P32 used general technique (was technique of): E55 Type
 
         Args:
@@ -1053,7 +1055,7 @@ class Activity(Event):
 
         return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
 
-    def used_specific_technique(self, *entities, uris: list = None) -> bool:
+    def p33_used_specific_technique(self, *entities, uris: list = None) -> bool:
         """P33 used specific technique (was used by): E29 Design or Procedure
 
         Args:
@@ -1068,7 +1070,7 @@ class Activity(Event):
 
         return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
 
-    def used_object_of_type(self, *entities, uris: list = None) -> bool:
+    def p125_used_object_of_type(self, *entities, uris: list = None) -> bool:
         """P125 used object of type (was type of object used in): E55 Type
 
         Args:
@@ -1084,7 +1086,7 @@ class Activity(Event):
         return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
 
 
-class Attribute_Assginment(Activity):
+class E13AttributeAssignment(E7Activity):
     """E13 Attribute Assignment
 
     SubClassOf E7 Activity
@@ -1094,12 +1096,12 @@ class Attribute_Assginment(Activity):
     P177 assigned property type E55 Type
     """
 
-    class_uri = cidoc_ns + "E13_Attribute_Assignment"
+    class_uri = CIDOCNAMESPACE + "E13_Attribute_Assignment"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-    def assigned_attribute_to(self, *entities, uris: list = None) -> bool:
+    def p140_assigned_attribute_to(self, *entities, uris: list = None) -> bool:
         """P140 assigned attribute to (was attributed by): E1 CRM Entity
 
         Args:
@@ -1114,7 +1116,7 @@ class Attribute_Assginment(Activity):
 
         return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
 
-    def assigned(self, *entities, uris: list = None) -> bool:
+    def p141_assigned(self, *entities, uris: list = None) -> bool:
         """P141 assigned (was assigned by): E1 CRM Entity
 
         Args:
@@ -1129,7 +1131,7 @@ class Attribute_Assginment(Activity):
 
         return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
 
-    def assigned_property_of_type(self, *entities, uris: list = None) -> bool:
+    def p177_assigned_property_of_type(self, *entities, uris: list = None) -> bool:
         """P177 assigned property of type: E55 Type
 
         Args:
@@ -1145,7 +1147,7 @@ class Attribute_Assginment(Activity):
         return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
 
 
-class Dimension(CRM_Entity):
+class E54Dimension(E1CRMEntity):
     """E54 Dimension
 
     SubClassOf E1 CRM Entity
@@ -1154,12 +1156,12 @@ class Dimension(CRM_Entity):
     P91 has unit (is unit of): E58 Measurement Unit
     """
 
-    class_uri = cidoc_ns + "E54_Dimension"
+    class_uri = CIDOCNAMESPACE + "E54_Dimension"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-    def has_value(self, content: str, datatype: str = None) -> bool:
+    def p90_has_value(self, content: str, datatype: str = None) -> bool:
         """P90 has value: E60 Number
 
         Args:
@@ -1179,7 +1181,7 @@ class Dimension(CRM_Entity):
 
         return True
 
-    def has_unit(self, *entities, uris: list = None) -> bool:
+    def p91_has_unit(self, *entities, uris: list = None) -> bool:
         """P91 has unit (is unit of): E58 Measurement Unit
 
         Args:
@@ -1195,7 +1197,7 @@ class Dimension(CRM_Entity):
         return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
 
 
-class Actor(Persistent_Item):
+class E39Actor(E77PersistentItem):
     """E39 Actor
 
     SubClassOf E77 Persistent Item
@@ -1204,12 +1206,12 @@ class Actor(Persistent_Item):
     P75 possesses (is possessed by): E30 Right
     P76 has contact point (provides access to): E41 Appellation
     """
-    class_uri = cidoc_ns + "E39_Actor"
+    class_uri = CIDOCNAMESPACE + "E39_Actor"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-    def has_current_or_former_residence(self, *entities, uris: list = None) -> bool:
+    def p74_has_current_or_former_residence(self, *entities, uris: list = None) -> bool:
         """P74 has current or former residence (is current or former residence of): E53 Place
 
         Args:
@@ -1224,7 +1226,7 @@ class Actor(Persistent_Item):
 
         return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
 
-    def possesses(self, *entities, uris: list = None) -> bool:
+    def p75_possesses(self, *entities, uris: list = None) -> bool:
         """P75 possesses (is possessed by): E30 Right
 
         Args:
@@ -1239,7 +1241,7 @@ class Actor(Persistent_Item):
 
         return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
 
-    def has_contact_point(self, *entities, uris: list = None) -> bool:
+    def p76_has_contact_point(self, *entities, uris: list = None) -> bool:
         """P76 has contact point (provides access to): E41 Appellation
 
         Args:
@@ -1255,7 +1257,7 @@ class Actor(Persistent_Item):
         return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
 
 
-class Group(Actor):
+class E74Group(E39Actor):
     """E74 Group
 
     SubClassOf E39 Actor
@@ -1264,12 +1266,12 @@ class Group(Actor):
     (P107.1 kind of member: E55 Type) [Not implemented]
     """
 
-    class_uri = cidoc_ns + "E74_Group"
+    class_uri = CIDOCNAMESPACE + "E74_Group"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-    def has_current_or_former_member(self, *entities, uris: list = None) -> bool:
+    def p107_has_current_or_former_member(self, *entities, uris: list = None) -> bool:
         """P107 has current or former member (is current or former member of): E39 Actor
 
         Args:
@@ -1285,7 +1287,7 @@ class Group(Actor):
         return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
 
 
-class Physical_Thing(Legal_Object):
+class E18PhysicalThing(E72LegalObject):
     """
     E18 Physical Thing
 
