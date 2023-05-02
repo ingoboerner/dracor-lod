@@ -686,6 +686,8 @@ class E55Type(E28ConceptualObject):
 
     Implemented inverse: P2i is type of: E1 CRM Entity
     P125i was type of object used in (used object of type) E7 Activity
+    P135i was created by (created type): E83 Type Creation
+
     """
 
     class_uri = CIDOCNAMESPACE + "E55_Type"
@@ -786,6 +788,21 @@ class E55Type(E28ConceptualObject):
         """
         prop = CRM.P125i_was_type_of_object_used_in
         prop_inverse = CRM.P125_used_object_of_type
+
+        return self.add_triples(entities=list(entities), uris=uris, prop=prop, prop_inverse=prop_inverse)
+
+    def p135i_was_created_by(self, *entities, uris: list = None) -> bool:
+        """P135i was created by (created type): E83 Type Creation
+
+        Args:
+            *entities (optional): Any number of instances of an Entity class
+            uris (list, optional): List of URIs of entities that identify this
+
+        Returns:
+             bool: True if added
+        """
+        prop = CRM.P135i_was_created_by
+        prop_inverse = CRM.P135_created_type
 
         return self.add_triples(entities=list(entities), uris=uris, prop=prop, prop_inverse=prop_inverse)
 
@@ -1258,6 +1275,8 @@ class E39Actor(E77PersistentItem):
     P74 has current or former residence (is current or former residence of): E53 Place
     P75 possesses (is possessed by): E30 Right
     P76 has contact point (provides access to): E41 Appellation
+
+    Inverse: P14i performed (carried out by): E7 Activity
     """
     class_uri = CIDOCNAMESPACE + "E39_Actor"
 
@@ -1306,6 +1325,21 @@ class E39Actor(E77PersistentItem):
         """
         prop = CRM.P76_has_contact_point
         prop_inverse = CRM.P76i_provides_access_to
+
+        return self.add_triples(entities=list(entities), uris=uris, prop=prop, prop_inverse=prop_inverse)
+
+    def p14i_performed(self, *entities, uris: list = None) -> bool:
+        """P14i performed (carried out by): E7 Activity
+
+        Args:
+            *entities (optional): Any number of instances of an Entity class
+            uris (list, optional): List of URIs of entities that identify this
+
+        Returns:
+             bool: True if added
+        """
+        prop = CRM.P14i_performed
+        prop_inverse = CRM.P14_carried_out_by
 
         return self.add_triples(entities=list(entities), uris=uris, prop=prop, prop_inverse=prop_inverse)
 
@@ -1515,4 +1549,49 @@ class E65Creation(E7Activity, E63BeginningOfExistence):
 
         return self.add_triples(entities=list(entities), uris=uris, prop=prop, prop_inverse=prop_inverse)
 
-# Modification
+
+class E83TypeCreation(E65Creation):
+    """E83 Type Creation
+
+    SubClassOf E65 Creation
+
+    P135 created type (was created by): E55 Type
+    P136 was based on (supported type creation): E1 CRM Entity
+    (P136.1 in the taxonomic role: E55 Type) [Not implemented]
+
+    """
+    class_uri = CIDOCNAMESPACE + "E83_Type_Creation"
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+    def p135_created_type(self, *entities, uris: list = None) -> bool:
+        """P135 created type (was created by): E55 Type
+
+        Args:
+            *entities (optional): Any number of instances of an Entity class
+            uris (list, optional): List of URIs of entities that identify this
+
+        Returns:
+             bool: True if added
+        """
+        prop = CRM.P135_created_type
+        prop_inverse = CRM.P135i_was_created_by
+
+        return self.add_triples(entities=list(entities), uris=uris, prop=prop, prop_inverse=prop_inverse)
+
+    def p136_was_based_on(self, *entities, uris: list = None) -> bool:
+        """P136 was based on (supported type creation): E1 CRM Entity
+
+        Args:
+            *entities (optional): Any number of instances of an Entity class
+            uris (list, optional): List of URIs of entities that identify this
+
+        Returns:
+             bool: True if added
+        """
+        prop = CRM.P136_was_based_on
+        prop_inverse = CRM.P136i_supported_type_creation
+
+        return self.add_triples(entities=list(entities), uris=uris, prop=prop, prop_inverse=prop_inverse)
+
