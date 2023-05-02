@@ -24,8 +24,9 @@ range entity than the domain, e.g. E39_Actor P14i_performed  E7_Activity.
 from rdflib import Namespace, URIRef, Literal, XSD
 from entity import Entity
 
-# this should be CIDOCNAMESPACE
+# Base uri used for Class URIs
 CIDOCNAMESPACE = "http://www.cidoc-crm.org/cidoc-crm/"
+
 CRM = Namespace(CIDOCNAMESPACE)
 
 
@@ -1614,3 +1615,17 @@ class E83TypeCreation(E65Creation):
 
         return self.add_triples(entities=list(entities), uris=uris, prop=prop, prop_inverse=prop_inverse)
 
+
+class E24PhysicalHumanMadeThing(E18PhysicalThing, E71HumanMadeThing):
+    """E24 Physical Human-Made Thing
+
+    SubClassOf E18 Physical Thing AND E71 Human-Made Thing
+
+    P62 depicts (is depicted by): E1 CRM Entity [Not implemented]
+    (P62.1 mode of depiction: E55 Type) [Not implemented]
+    P65 shows visual item (is shown by): E36 Visual Item [Not implemented]
+    """
+    class_uri = CIDOCNAMESPACE + "E24_Physical_Human-Made_Thing"
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
