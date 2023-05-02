@@ -1286,6 +1286,21 @@ class E54Dimension(E1CRMEntity):
 
         return self.add_triples(entities=list(entities), uris=uris, prop=prop, prop_inverse=prop_inverse)
 
+    def p40i_was_observed_in(self, *entities, uris: list = None) -> bool:
+        """P40i observed dimension (was observed in): E16 Measurement
+
+        Args:
+            *entities (optional): Any number of instances of an Entity class
+            uris (list, optional): List of URIs of entities that identify this
+
+        Returns:
+             bool: True if added
+        """
+        prop = CRM.P40i_was_observed_in
+        prop_inverse = CRM.P40_observed_dimension
+
+        return self.add_triples(entities=list(entities), uris=uris, prop=prop, prop_inverse=prop_inverse)
+
 
 class E39Actor(E77PersistentItem):
     """E39 Actor
@@ -1630,6 +1645,7 @@ class E24PhysicalHumanMadeThing(E18PhysicalThing, E71HumanMadeThing):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
+
 class E11Modification(E7Activity):
     """E11 Modification
 
@@ -1657,3 +1673,33 @@ class E12Production(E11Modification, E63BeginningOfExistence):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+
+
+class E16Measurement(E13AttributeAssignment):
+    """E16 Measurement
+
+    SubClassOf E13 Attribute Assignment
+
+    P39 measured (was measured by): E18 Physical Thing [Not implemented]
+    P40 observed dimension (was observed in): E54 Dimension
+    TODO: implement
+    """
+    class_uri = CIDOCNAMESPACE + "E16_Measurement"
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+    def p40_observed_dimension(self, *entities, uris: list = None) -> bool:
+        """P40 observed dimension (was observed in): E54 Dimension
+
+        Args:
+            *entities (optional): Any number of instances of an Entity class
+            uris (list, optional): List of URIs of entities that identify this
+
+        Returns:
+             bool: True if added
+        """
+        prop = CRM.P40_observed_dimension
+        prop_inverse = CRM.P40i_was_observed_in
+
+        return self.add_triples(entities=list(entities), uris=uris, prop=prop, prop_inverse=prop_inverse)
