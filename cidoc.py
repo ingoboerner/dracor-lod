@@ -1629,3 +1629,31 @@ class E24PhysicalHumanMadeThing(E18PhysicalThing, E71HumanMadeThing):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+
+class E11Modification(E7Activity):
+    """E11 Modification
+
+    SubClassOf E7 Activity
+
+    P31 has modified (was modified by): E18 Physical Thing [Not implemented]
+    P126 employed (was employed in): E57 Material [Not implemented]
+    """
+    class_uri = CIDOCNAMESPACE + "E11_Modification"
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+
+class E12Production(E11Modification, E63BeginningOfExistence):
+    """E12 Production
+
+    SubClass of E11 Modification AND E63 Beginning of Existence
+
+    P108 has produced (was produced by): E24 Physical Human-Made Thing [Not implemented]
+    P186 produced thing of product type (is produced by): E99 Product Type [Not implemented]
+
+    """
+    class_uri = CIDOCNAMESPACE + "E12_Production"
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
