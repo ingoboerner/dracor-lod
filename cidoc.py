@@ -1315,5 +1315,4 @@ class E18PhysicalThing(E72LegalObject):
 
 # E21 Person
 
-
 # E30 Right?
