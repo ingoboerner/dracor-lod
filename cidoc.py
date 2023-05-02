@@ -1,7 +1,26 @@
-"""The implemented class hierarchy MUST not be confused with the CIDOC-CRM class hierarchy! There might be some classes
-in between that have not been implemented.
+"""CIDOC-CRM (Version 7.1.2)
 
+Python module to provide CIDOC-CRM classes and their properties as Python classes and methods.
+
+Author: Ingo Börner
+
+Notes:
+
+Not all classes are implemented, focus is on the classes used in the RDF serialization of DraCor data or
+CLS INFRA's clscor data model. If a class is implemented its ancestors are included withing the module.
+
+The implemented class hierarchy follows the CIDOC-CRM class hierarchy. In rare cases, when deemed appropriate,
+some CIDOC classes might be skipped. Properties will be implemented with the child class if there are any. Not all
+properties of all classes are implemented. See class annotations for hints (marked with [Not implemented]).
+
+Naming of the classes follows Python best practices. Class names are CamelCased, e.g. E73InformationObject
+method names are in snake_case, e.g. p1_is_identified_by. Dashes in class names and names of methods are not preserved,
+e.g E71 Human-Made thing becomes E71HumanMadeThing, P4 has time-span becomes p4_has_timespan.
+
+Inverse properties are only implemented for some classes, if it is expected, that they will be rather called from the
+range entity than the domain, e.g. E39_Actor P14i_performed  E7_Activity.
 """
+
 from rdflib import Namespace, URIRef, Literal, XSD
 from entity import Entity
 
