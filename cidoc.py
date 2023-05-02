@@ -235,25 +235,23 @@ class E70Thing(E77PersistentItem):
         return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
 
 
-class E28ConceptualObject(E70Thing):
-    """E28 Conceptual Object
+class E71HumanMadeThing(E70Thing):
+    """E71 Human-Made Thing
 
-    SubClassOf E71 Human-Made Thing <- E70 Thing
-    E71 is not implemented. Properties P102, P103 from E71 are implemented with this (E28).
-    E28 does not have specialized properties.
+    subClassOf E70 Thing
 
-    P102 has title (is title of): E35 Title [originally inherited from E71]
+    P102 has title (is title of): E35 Title
     (P102.1 has type: E55 Type) [Not implemented]
-    P103 was intended for (was intention of): E55 Type [originally inherited from E71]
+    P103 was intended for (was intention of): E55 Type
     """
 
-    class_uri = CIDOCNAMESPACE + "E28_Conceptual_Object"
+    class_uri = CIDOCNAMESPACE + "E71_Human-Made_Thing"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
     def p102_has_title(self, *entities, uris: list = None) -> bool:
-        """P102 has title (is title of): E35 Title [originally inherited from E71]
+        """P102 has title (is title of): E35 Title
 
         Args:
             *entities (optional): Any number of instances of an Entity class
@@ -268,7 +266,7 @@ class E28ConceptualObject(E70Thing):
         return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
 
     def p103_was_intended_for(self, *entities, uris: list = None) -> bool:
-        """P103 was intended for (was intention of): E55 Type [originally inherited from E71]
+        """P103 was intended for (was intention of): E55 Type
 
         Args:
             *entities (optional): Any number of instances of an Entity class
@@ -279,6 +277,36 @@ class E28ConceptualObject(E70Thing):
         """
         prop = CRM.P103_was_intended_for
         prop_inverse = CRM.P103i_was_intention_of
+
+        return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
+
+
+class E28ConceptualObject(E71HumanMadeThing):
+    """E28 Conceptual Object
+
+    SubClassOf E71 Human-Made Thing
+    E28 does not have specialized properties.
+
+    Inverse: P94i was created by (has created): E65 Creation
+    """
+
+    class_uri = CIDOCNAMESPACE + "E28_Conceptual_Object"
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+    def p94i_was_created_by(self, *entities, uris: list = None) -> bool:
+        """P94i was created by (has created): E65 Creation
+
+        Args:
+            *entities (optional): Any number of instances of an Entity class
+            uris (list, optional): List of URIs of entities that identify this
+
+        Returns:
+             bool: True if added
+        """
+        prop = CRM.P94i_was_created_by
+        prop_inverse = CRM.P94_has_created
 
         return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
 
@@ -620,8 +648,34 @@ class E42Identifier(E41Appellation):
         super().__init__(**kwargs)
 
 
-# Title
-# TODO: class Title()
+class E35Title(E41Appellation, E33LinguisticObject):
+    """E35 Title
+
+    SubClassOf E41 Appellation AND E33 Linguistic Object
+
+    No specialized properties.
+    Inverse: P102i is title of (has title): E71 Human-Made Thing
+    """
+    class_uri = CIDOCNAMESPACE + "E35_Title"
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+    def p102i_is_title_of(self, *entities, uris: list = None) -> bool:
+        """P102i is title of (has title): E71 Human-Made Thing
+
+        Args:
+            *entities (optional): Any number of instances of an Entity class
+            uris (list, optional): List of URIs of entities that identify this
+
+        Returns:
+             bool: True if added
+        """
+        prop = CRM.P102i_is_title_of
+        prop_inverse = CRM.P102_has_title
+
+        return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
+
 
 class E55Type(E28ConceptualObject):
     """E55 Type
@@ -1306,13 +1360,160 @@ class E18PhysicalThing(E72LegalObject):
     P156 occupies (is occupied by): E53 Place [Not implemented]
     P196 defines (is defined by): E92 Spacetime Volume [Not implemented]
 
-    TODO: implement
+    These properties are probably not needed for the current implementation, thus are skipped.
+    """
+    class_uri = CIDOCNAMESPACE + "E18_Physical_Thing"
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+
+class E19PhysicalObject(E18PhysicalThing):
+    """E19 Physical Object
+
+    subClassOf E18 Physical Thing
+
+    P54 has current permanent location (is current permanent location of): E53 Place [Not implemented]
+    P55 has current location (currently holds): E53 Place [Not implemented]
+    P56 bears feature (is found on): E26 Physical Feature [Not implemented]
+    P57 has number of parts: E60 Number [Not implemented]
+
+    These properties are probably not needed for the current implementation, thus are skipped.
     """
 
-# E19 Physical Object (E18)
+    class_uri = CIDOCNAMESPACE + "E19_Physical_Object"
 
-# E20 Biological Object
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
 
-# E21 Person
 
-# E30 Right?
+class E20BiologicalObject(E19PhysicalObject):
+    """E20 Biological Object
+
+    subClassOf E19 Physical Object
+
+    The class does not have specialized properties.
+    """
+
+    class_uri = CIDOCNAMESPACE + "E20_Biological_Object"
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+
+class E21Person(E20BiologicalObject):
+    """E21 Person
+
+    subClassOf E20 Biological Object
+
+    P152 has parent (is parent of): E21 Person
+    """
+
+    class_uri = CIDOCNAMESPACE + "E21_Person"
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+    def p152_has_parent(self, *entities, uris: list = None) -> bool:
+        """P152 has parent (is parent of): E21 Person
+
+        Args:
+            *entities (optional): Any number of instances of an Entity class
+            uris (list, optional): List of URIs of entities that identify this
+
+        Returns:
+             bool: True if added
+        """
+        prop = CRM.P152_has_parent
+        prop_inverse = CRM.P152i_is_parent_of
+
+        return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
+
+
+class E30Right(E89PropositionalObject):
+    """E30 Right
+
+    subClassOf E89 Propositional Object
+
+    No specialized properties.
+
+    Inverse: P75i is possessed by (possesses): E39 Actor
+
+    """
+    class_uri = CIDOCNAMESPACE + "E30_Right"
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+    def p75i_is_possessed_by(self, *entities, uris: list = None) -> bool:
+        """P75i is possessed by (possesses): E39 Actor
+
+        Args:
+            *entities (optional): Any number of instances of an Entity class
+            uris (list, optional): List of URIs of entities that identify this
+
+        Returns:
+             bool: True if added
+        """
+        prop = CRM.P75i_is_possessed_by
+        prop_inverse = CRM.P75_possesses
+
+        return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
+
+
+class E63BeginningOfExistence(E5Event):
+    """E63 Beginning of Existence
+
+    SubClassOf E5 Event
+
+    P92 brought into existence (was brought into existence by): E77 Persistent Item
+    """
+    class_uri = CIDOCNAMESPACE + "E63_Beginning_of_Existence"
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+    def p92_brought_into_existence(self, *entities, uris: list = None) -> bool:
+        """P92 brought into existence (was brought into existence by): E77 Persistent Item
+
+        Args:
+            *entities (optional): Any number of instances of an Entity class
+            uris (list, optional): List of URIs of entities that identify this
+
+        Returns:
+             bool: True if added
+        """
+        prop = CRM.P92_brought_into_existence
+        prop_inverse = CRM.P92i_was_brought_into_existence_by
+
+        return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
+
+
+class E65Creation(E7Activity, E63BeginningOfExistence):
+    """E65 Beginning of Existence
+
+    SubClassOf E7 Activity AND E63 Beginning of Existence
+
+    P94 has created (was created by): E28 Conceptual Object
+    """
+    class_uri = CIDOCNAMESPACE + "E65_Creation"
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+    def p94_has_created(self, *entities, uris: list = None) -> bool:
+        """P94 has created (was created by): E28 Conceptual Object
+
+        Args:
+            *entities (optional): Any number of instances of an Entity class
+            uris (list, optional): List of URIs of entities that identify this
+
+        Returns:
+             bool: True if added
+        """
+        prop = CRM.P94_has_created
+        prop_inverse = CRM.P94i_was_created_by
+
+        return self.add_triples(entities, uris=uris, prop=prop, prop_inverse=prop_inverse)
+
+# Modification
