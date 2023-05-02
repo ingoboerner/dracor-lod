@@ -6,7 +6,7 @@ Author: Ingo Börner
 """
 
 
-from rdflib import Namespace, URIRef, Literal, XSD
+from rdflib import Namespace
 from cidoc import E73InformationObject, E54Dimension, E11Modification, E65Creation, E16Measurement
 
 # Base uri used for Class URIs

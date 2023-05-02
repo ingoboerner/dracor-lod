@@ -5,7 +5,7 @@ Python module to provide LRMoo classes and their properties as Python classes an
 Author: Ingo Börner
 """
 
-from rdflib import Namespace, URIRef, Literal, XSD
+from rdflib import Namespace
 from cidoc import E89PropositionalObject, E73InformationObject, E24PhysicalHumanMadeThing, E65Creation, E12Production, \
     E7Activity
 

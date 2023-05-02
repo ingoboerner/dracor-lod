@@ -1682,7 +1682,6 @@ class E16Measurement(E13AttributeAssignment):
 
     P39 measured (was measured by): E18 Physical Thing [Not implemented]
     P40 observed dimension (was observed in): E54 Dimension
-    TODO: implement
     """
     class_uri = CIDOCNAMESPACE + "E16_Measurement"
 
