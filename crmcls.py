@@ -7,7 +7,8 @@ left out the properties because they have yet to be consolidated.
 from rdflib import Namespace
 from cidoc import E73InformationObject, E55Type, E7Activity, E29DesignOrProcedure, E83TypeCreation, E90SymbolicObject
 from lrmoo import F3Manifestation
-from crmdig import D1DigitalObject
+from crmdig import D1DigitalObject, D14Software
+from pem import PE43EncodingType
 
 CLSCORNAMESPACE = "https://clscor.io/ontologies/CRMcls/"
 
@@ -83,12 +84,12 @@ class X6Method(E29DesignOrProcedure):
         super().__init__(**kwargs)
 
 
-class X7Format:
+class X7Format(PE43EncodingType):
     """X7 Format
 
-    owl:equivalentClass pem:PE43_Encoding_Type .
+    owl:equivalentClass pem:PE43_Encoding_Type (= SubClassOf crm: E55 Type) .
 
-    TODO: this does not inherit from anything
+    TODO: this does not inherit from anything. PE43 is a subclass of crm: E55 Type; I inherit here directly (cf. X8!)
     """
     class_uri = CLSCORNAMESPACE + "X7_Format"
 
@@ -96,12 +97,12 @@ class X7Format:
         super().__init__(**kwargs)
 
 
-class X8Schema:
+class X8Schema(D14Software):
     """X8 Schema
 
-    owl:equivalentClass pem:PE38_Schema .
+    owl:equivalentClass pem:PE38_Schema (=SubClassOf dig: D14 Software) .
 
-    TODO: this does not inherit from anything
+    TODO: check inheritance; because equivalent, I also inherit from D14; but maybe inherit directly from pem: PE38
     """
     class_uri = CLSCORNAMESPACE + "X8_Schema"
 
