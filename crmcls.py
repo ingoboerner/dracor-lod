@@ -1,6 +1,7 @@
-"""CRMcls Ontology Draft
+"""CRMcls Unstable Ontology Draft
 
-(almost) aligned to https://gitlab.clsinfra.io/cls-infra/wp5wp6/mkm-cidoc/-/blob/vera/model/CLSCorDataModel.ttl
+(almost) aligned to https://gitlab.clsinfra.io/cls-infra/wp5wp6/mkm-cidoc/-/blob/vera/model/CLSCorDataModel.ttl, 
+left out the properties because they have yet to be consolidated.
 """
 
 from rdflib import Namespace
@@ -142,4 +143,21 @@ class X11PrototypicalDocument(E55Type):
         super().__init__(**kwargs)
 
 
+"""
+crmcls:Z9_has_subcorpus a rdf:Property ;
+    rdfs:label "hat als Subkorpus"@de,
+        "has subcorpus"@en ;
+    rdfs:comment "associates a corpus with its subcorpus"@en ;
+    rdfs:domain crmcls:X1_Corpus ;
+    rdfs:range crmcls:X1_Corpus ;
+    rdfs:subPropertyOf crm:P148_has_component .
 
+crmcls:Z9i_is_subcorpus_of a rdf:Property ;
+    rdfs:label "ist Subkorpus von"@de,
+        "is subcorpus of"@en ;
+    rdfs:comment "associates subcorpus with its super corpus"@en ;
+    rdfs:domain crmcls:X1_Corpus ;
+    rdfs:range crmcls:X1_Corpus ;
+    rdfs:subPropertyOf crm:P148i_is_component_of .
+
+"""
