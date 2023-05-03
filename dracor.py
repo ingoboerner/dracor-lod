@@ -30,7 +30,7 @@ class DraCor:
         },
         {
             "prefix": "cls",
-            "uri": "http://clscor.io/ontology/"
+            "uri": "https://clscor.io/ontologies/CRMcls/"
         },
         {
             "prefix": "lrm",
