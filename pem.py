@@ -18,9 +18,9 @@ from cidoc import E7Activity, E70Thing, E55Type
 from crmdig import D1DigitalObject, D14Software
 
 # Strange namespace, but it's in the RDF-XML of PEM (Downloaded this: http://parthenos.d4science.org/CRMext/CRMpe.rdfs)
-PEMNAMESPACE = "http://parthenos.d4science.org/CRMext/CRMpe.rdfs/"
+NAMESPACE = "http://parthenos.d4science.org/CRMext/CRMpe.rdfs#"
 
-PEM = Namespace(PEMNAMESPACE)
+PEM = Namespace(NAMESPACE)
 
 
 class PE1Service(E7Activity):
@@ -33,7 +33,7 @@ class PE1Service(E7Activity):
     PP45 has competency: PE36 Competency Type [Not implemented]
     PP51 has availability: PE39 Availability Type [Not implemented]
     """
-    class_uri = PEMNAMESPACE + "PE1_Service"
+    class_uri = NAMESPACE + "PE1_Service"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -51,7 +51,7 @@ class PE8EService(PE1Service):
     PP49 provides access point: PE29 [Not implemented]
     """
 
-    class_uri = PEMNAMESPACE + "PE8_E-Service"
+    class_uri = NAMESPACE + "PE8_E-Service"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -65,7 +65,7 @@ class PE19PersistentDigitalObject(D1DigitalObject):
     PP16 has persistent digital object part: PE19 Persistent Digital Object [Not implemented]
     """
 
-    class_uri = PEMNAMESPACE + "PE19_Persistent_Digital_Object"
+    class_uri = NAMESPACE + "PE19_Persistent_Digital_Object"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -77,7 +77,7 @@ class PE32CuratedThing(E70Thing):
     SubClassOf crm: E70 Thing
     """
 
-    class_uri = PEMNAMESPACE + "PE32_Curated_Thing"
+    class_uri = NAMESPACE + "PE32_Curated_Thing"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -89,7 +89,7 @@ class PE20VolatileDigitalObject(D1DigitalObject, E70Thing):
     SubClassOf PE32 Curated Thing AND D1 Digital Object
     """
 
-    class_uri = PEMNAMESPACE + "PE20_Volatile_Digital_Object"
+    class_uri = NAMESPACE + "PE20_Volatile_Digital_Object"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -101,7 +101,7 @@ class PE23VolatileSoftware(D14Software, PE20VolatileDigitalObject):
     SubClassOf crmdig: D14 Software AND PE20 Volatile Digital Object
     """
 
-    class_uri = PEMNAMESPACE + "PE23_Volatile_Software"
+    class_uri = NAMESPACE + "PE23_Volatile_Software"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -112,7 +112,7 @@ class PE37ProtocolType(E55Type):
     SubClassOf crm: E55 Type
     """
 
-    class_uri = PEMNAMESPACE + "PE37_Protocol_Type"
+    class_uri = NAMESPACE + "PE37_Protocol_Type"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -123,7 +123,7 @@ class PE38Schema(D14Software):
 
     SubClassOf crmdig: D14 Software
     """
-    class_uri = PEMNAMESPACE + "PE38_Schema"
+    class_uri = NAMESPACE + "PE38_Schema"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -134,7 +134,7 @@ class PE43EncodingType(E55Type):
 
     SubClassOf crm: E55 Type
     """
-    class_uri = PEMNAMESPACE + "PE43_Encoding_Type"
+    class_uri = NAMESPACE + "PE43_Encoding_Type"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

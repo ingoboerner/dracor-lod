@@ -10,9 +10,9 @@ from rdflib import Namespace
 from cidoc import E73InformationObject, E54Dimension, E11Modification, E65Creation, E16Measurement
 
 # Base uri used for Class URIs
-DIGNAMESPACE = "http://www.ics.forth.gr/isl/CRMdig/"
+NAMESPACE = "http://www.ics.forth.gr/isl/CRMdig/"
 
-DIG = Namespace(DIGNAMESPACE)
+DIG = Namespace(NAMESPACE)
 
 
 class D1DigitalObject(E73InformationObject):
@@ -21,7 +21,7 @@ class D1DigitalObject(E73InformationObject):
     SubClassOf crm: E73 Information Object
     """
 
-    class_uri = DIGNAMESPACE + "D1_Digital_Object"
+    class_uri = NAMESPACE + "D1_Digital_Object"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -83,7 +83,7 @@ class D7DigitalMachineEvent(E11Modification, E65Creation):
     L18 has modified (was modified by): D13 Digital Information Carrier [Not implemented]
     L23 used software or firmware (was software or firmware used by): D14 Software
     """
-    class_uri = DIGNAMESPACE + "D7_Digital_Machine_Event"
+    class_uri = NAMESPACE + "D7_Digital_Machine_Event"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -140,7 +140,7 @@ class D9DataObject(D1DigitalObject, E54Dimension):
     SubClassOf D1 Digital Object AND crm: E54 Dimension
     """
 
-    class_uri = DIGNAMESPACE + "D9_Data_Object"
+    class_uri = NAMESPACE + "D9_Data_Object"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -171,7 +171,7 @@ class D10SoftwareExecution(D7DigitalMachineEvent):
     L24 created logfile (was logfile created by): D1 Digital Object [Not implemented]
     """
 
-    class_uri = DIGNAMESPACE + "D10_Software_Execution"
+    class_uri = NAMESPACE + "D10_Software_Execution"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -200,7 +200,7 @@ class D11DigitalMeasurementEvent(D7DigitalMachineEvent, E16Measurement):
     L17 measured thing of type (was type of thing measured by): E55 Type
     L20 has created (was created by): D9 Data Object
     """
-    class_uri = DIGNAMESPACE + "D11_Digital_Measurement_Event"
+    class_uri = NAMESPACE + "D11_Digital_Measurement_Event"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -241,7 +241,7 @@ class D14Software(D1DigitalObject):
 
     SubClassOf D1 Digital Object
     """
-    class_uri = DIGNAMESPACE + "D14_Software"
+    class_uri = NAMESPACE + "D14_Software"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

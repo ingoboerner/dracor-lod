@@ -25,9 +25,9 @@ from rdflib import Namespace, URIRef, Literal, XSD
 from entity import Entity
 
 # Base uri used for Class URIs
-CIDOCNAMESPACE = "http://www.cidoc-crm.org/cidoc-crm/"
+NAMESPACE = "http://www.cidoc-crm.org/cidoc-crm/"
 
-CRM = Namespace(CIDOCNAMESPACE)
+CRM = Namespace(NAMESPACE)
 
 
 class E1CRMEntity(Entity):
@@ -44,7 +44,7 @@ class E1CRMEntity(Entity):
     P141i was assigned by (assigned): E13 Attribute Assignment
     """
 
-    class_uri = CIDOCNAMESPACE + "E1_CRM_Entity"
+    class_uri = NAMESPACE + "E1_CRM_Entity"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -170,7 +170,7 @@ class E77PersistentItem(E1CRMEntity):
 
     The class E77 Persistent Item does not have any specialized properties.
     """
-    class_uri = CIDOCNAMESPACE + "E77_Persistent_Item"
+    class_uri = NAMESPACE + "E77_Persistent_Item"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -188,7 +188,7 @@ class E70Thing(E77PersistentItem):
 
     Inverse: P16i was used for (used specific object): E7 Activity
     """
-    class_uri = CIDOCNAMESPACE + "E70_Thing"
+    class_uri = NAMESPACE + "E70_Thing"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -264,7 +264,7 @@ class E71HumanMadeThing(E70Thing):
     P103 was intended for (was intention of): E55 Type
     """
 
-    class_uri = CIDOCNAMESPACE + "E71_Human-Made_Thing"
+    class_uri = NAMESPACE + "E71_Human-Made_Thing"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -309,7 +309,7 @@ class E28ConceptualObject(E71HumanMadeThing):
     Inverse: P94i was created by (has created): E65 Creation
     """
 
-    class_uri = CIDOCNAMESPACE + "E28_Conceptual_Object"
+    class_uri = NAMESPACE + "E28_Conceptual_Object"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -341,7 +341,7 @@ class E89PropositionalObject(E28ConceptualObject):
     P129 is about (is subject of): E1 CRM Entity
     """
 
-    class_uri = CIDOCNAMESPACE + "E89_Propositional_Object"
+    class_uri = NAMESPACE + "E89_Propositional_Object"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -401,7 +401,7 @@ class E72LegalObject(E70Thing):
     P105 right held by (has right on): E39 Actor [inherited from E72 Legal Object]
     """
 
-    class_uri = CIDOCNAMESPACE + "E72_Legal_Object"
+    class_uri = NAMESPACE + "E72_Legal_Object"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -446,7 +446,7 @@ class E90SymbolicObject(E28ConceptualObject, E72LegalObject):
     P190 has symbolic content: E62 String
     """
 
-    class_uri = CIDOCNAMESPACE + "E90_Symbolic_Object"
+    class_uri = NAMESPACE + "E90_Symbolic_Object"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -495,7 +495,7 @@ class E73InformationObject(E90SymbolicObject, E89PropositionalObject):
 
     """
 
-    class_uri = CIDOCNAMESPACE + "E73_Information_Object"
+    class_uri = NAMESPACE + "E73_Information_Object"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -527,7 +527,7 @@ class E29DesignOrProcedure(E73InformationObject):
 
     Inverse: P33 used specific technique (was used by): E29 Design or Procedure
     """
-    class_uri = CIDOCNAMESPACE + "E29_Design_or_Procedure"
+    class_uri = NAMESPACE + "E29_Design_or_Procedure"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -572,7 +572,7 @@ class E33LinguisticObject(E73InformationObject):
     P73 has translation (is translation of): E33 Linguistic Object
     """
 
-    class_uri = CIDOCNAMESPACE + "E33_Linguistic_Object"
+    class_uri = NAMESPACE + "E33_Linguistic_Object"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -617,7 +617,7 @@ class E41Appellation(E90SymbolicObject):
     Implemented inverse: P1i_identifies: E1 CRM Entity
     """
 
-    class_uri = CIDOCNAMESPACE + "E41_Appellation"
+    class_uri = NAMESPACE + "E41_Appellation"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -661,7 +661,7 @@ class E42Identifier(E41Appellation):
     No specialized properties.
     """
 
-    class_uri = CIDOCNAMESPACE + "E42_Identifier"
+    class_uri = NAMESPACE + "E42_Identifier"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -675,7 +675,7 @@ class E35Title(E41Appellation, E33LinguisticObject):
     No specialized properties.
     Inverse: P102i is title of (has title): E71 Human-Made Thing
     """
-    class_uri = CIDOCNAMESPACE + "E35_Title"
+    class_uri = NAMESPACE + "E35_Title"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -710,7 +710,7 @@ class E55Type(E28ConceptualObject):
 
     """
 
-    class_uri = CIDOCNAMESPACE + "E55_Type"
+    class_uri = NAMESPACE + "E55_Type"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -837,7 +837,7 @@ class E56Language(E55Type):
     Inverse: P72i_is_language_of (has language): E33 Linguistic Object
     """
 
-    class_uri = CIDOCNAMESPACE + "E56_Language"
+    class_uri = NAMESPACE + "E56_Language"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -866,7 +866,7 @@ class E58MeasurementUnit(E55Type):
     No specialized properties.
     """
 
-    class_uri = CIDOCNAMESPACE + "E58_Measurement_Unit"
+    class_uri = NAMESPACE + "E58_Measurement_Unit"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -888,7 +888,7 @@ class E2TemporalEntity(E1CRMEntity):
     P185 ends before the end of (ends after the end of): E2 Temporal Entity [Not implemented]
 
     """
-    class_uri = CIDOCNAMESPACE + "E2_Temporal_Entity"
+    class_uri = NAMESPACE + "E2_Temporal_Entity"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -920,7 +920,7 @@ class E4Period(E2TemporalEntity):
     Cubism (Cox, 2000), ...
     """
 
-    class_uri = CIDOCNAMESPACE + "E4_Period"
+    class_uri = NAMESPACE + "E4_Period"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -964,7 +964,7 @@ class E5Event(E4Period):
     P12 occurred in the presence of (was present at): E77 Persistent Item
     """
 
-    class_uri = CIDOCNAMESPACE + "E5_Event"
+    class_uri = NAMESPACE + "E5_Event"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -1020,7 +1020,7 @@ class E7Activity(E5Event):
     P125 used object of type (was type of object used in): E55 Type
     """
 
-    class_uri = CIDOCNAMESPACE + "E7_Activity"
+    class_uri = NAMESPACE + "E7_Activity"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -1186,7 +1186,7 @@ class E13AttributeAssignment(E7Activity):
     P177 assigned property type E55 Type
     """
 
-    class_uri = CIDOCNAMESPACE + "E13_Attribute_Assignment"
+    class_uri = NAMESPACE + "E13_Attribute_Assignment"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -1246,7 +1246,7 @@ class E54Dimension(E1CRMEntity):
     P91 has unit (is unit of): E58 Measurement Unit
     """
 
-    class_uri = CIDOCNAMESPACE + "E54_Dimension"
+    class_uri = NAMESPACE + "E54_Dimension"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -1313,7 +1313,7 @@ class E39Actor(E77PersistentItem):
 
     Inverse: P14i performed (carried out by): E7 Activity
     """
-    class_uri = CIDOCNAMESPACE + "E39_Actor"
+    class_uri = NAMESPACE + "E39_Actor"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -1388,7 +1388,7 @@ class E74Group(E39Actor):
     (P107.1 kind of member: E55 Type) [Not implemented]
     """
 
-    class_uri = CIDOCNAMESPACE + "E74_Group"
+    class_uri = NAMESPACE + "E74_Group"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -1430,7 +1430,7 @@ class E18PhysicalThing(E72LegalObject):
 
     These properties are probably not needed for the current implementation, thus are skipped.
     """
-    class_uri = CIDOCNAMESPACE + "E18_Physical_Thing"
+    class_uri = NAMESPACE + "E18_Physical_Thing"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -1449,7 +1449,7 @@ class E19PhysicalObject(E18PhysicalThing):
     These properties are probably not needed for the current implementation, thus are skipped.
     """
 
-    class_uri = CIDOCNAMESPACE + "E19_Physical_Object"
+    class_uri = NAMESPACE + "E19_Physical_Object"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -1463,7 +1463,7 @@ class E20BiologicalObject(E19PhysicalObject):
     The class does not have specialized properties.
     """
 
-    class_uri = CIDOCNAMESPACE + "E20_Biological_Object"
+    class_uri = NAMESPACE + "E20_Biological_Object"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -1477,7 +1477,7 @@ class E21Person(E20BiologicalObject):
     P152 has parent (is parent of): E21 Person
     """
 
-    class_uri = CIDOCNAMESPACE + "E21_Person"
+    class_uri = NAMESPACE + "E21_Person"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -1508,7 +1508,7 @@ class E30Right(E89PropositionalObject):
     Inverse: P75i is possessed by (possesses): E39 Actor
 
     """
-    class_uri = CIDOCNAMESPACE + "E30_Right"
+    class_uri = NAMESPACE + "E30_Right"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -1536,7 +1536,7 @@ class E63BeginningOfExistence(E5Event):
 
     P92 brought into existence (was brought into existence by): E77 Persistent Item
     """
-    class_uri = CIDOCNAMESPACE + "E63_Beginning_of_Existence"
+    class_uri = NAMESPACE + "E63_Beginning_of_Existence"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -1564,7 +1564,7 @@ class E65Creation(E7Activity, E63BeginningOfExistence):
 
     P94 has created (was created by): E28 Conceptual Object
     """
-    class_uri = CIDOCNAMESPACE + "E65_Creation"
+    class_uri = NAMESPACE + "E65_Creation"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -1595,7 +1595,7 @@ class E83TypeCreation(E65Creation):
     (P136.1 in the taxonomic role: E55 Type) [Not implemented]
 
     """
-    class_uri = CIDOCNAMESPACE + "E83_Type_Creation"
+    class_uri = NAMESPACE + "E83_Type_Creation"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -1640,7 +1640,7 @@ class E24PhysicalHumanMadeThing(E18PhysicalThing, E71HumanMadeThing):
     (P62.1 mode of depiction: E55 Type) [Not implemented]
     P65 shows visual item (is shown by): E36 Visual Item [Not implemented]
     """
-    class_uri = CIDOCNAMESPACE + "E24_Physical_Human-Made_Thing"
+    class_uri = NAMESPACE + "E24_Physical_Human-Made_Thing"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -1654,7 +1654,7 @@ class E11Modification(E7Activity):
     P31 has modified (was modified by): E18 Physical Thing [Not implemented]
     P126 employed (was employed in): E57 Material [Not implemented]
     """
-    class_uri = CIDOCNAMESPACE + "E11_Modification"
+    class_uri = NAMESPACE + "E11_Modification"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -1669,7 +1669,7 @@ class E12Production(E11Modification, E63BeginningOfExistence):
     P186 produced thing of product type (is produced by): E99 Product Type [Not implemented]
 
     """
-    class_uri = CIDOCNAMESPACE + "E12_Production"
+    class_uri = NAMESPACE + "E12_Production"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -1683,7 +1683,7 @@ class E16Measurement(E13AttributeAssignment):
     P39 measured (was measured by): E18 Physical Thing [Not implemented]
     P40 observed dimension (was observed in): E54 Dimension
     """
-    class_uri = CIDOCNAMESPACE + "E16_Measurement"
+    class_uri = NAMESPACE + "E16_Measurement"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

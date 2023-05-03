@@ -10,9 +10,9 @@ from cidoc import E89PropositionalObject, E73InformationObject, E24PhysicalHuman
     E7Activity
 
 # Base uri used for Class URIs
-LRMNAMESPACE = "http://www.cidoc-crm.org/cidoc-crm/lrmoo/"
+NAMESPACE = "http://www.cidoc-crm.org/cidoc-crm/lrmoo/"
 
-LRM = Namespace(LRMNAMESPACE)
+LRM = Namespace(NAMESPACE)
 
 
 class F1Work(E89PropositionalObject):
@@ -31,7 +31,7 @@ class F1Work(E89PropositionalObject):
     R74 uses expression of (has expression used in): F1 Work
     """
 
-    class_uri = LRMNAMESPACE + "F1_Work"
+    class_uri = NAMESPACE + "F1_Work"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -289,7 +289,7 @@ class F2Expression(E73InformationObject):
     (R76.1 has type: E55 Type) [Not implemented]
     """
 
-    class_uri = LRMNAMESPACE + "F2_Expression"
+    class_uri = NAMESPACE + "F2_Expression"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -471,7 +471,7 @@ class F3Manifestation(F2Expression):
     R71 has part (is part of): F3 Manifestation
     """
 
-    class_uri = LRMNAMESPACE + "F3_Manifestation"
+    class_uri = NAMESPACE + "F3_Manifestation"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -590,7 +590,7 @@ class F5Item(E24PhysicalHumanMadeThing):
     R7 is materialization of (is materialized in): F3 Manifestation
     """
 
-    class_uri = LRMNAMESPACE + "F5_Item"
+    class_uri = NAMESPACE + "F5_Item"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -620,7 +620,7 @@ class F27WorkCreation(E65Creation):
 
     """
 
-    class_uri = LRMNAMESPACE + "F27_Work_Creation"
+    class_uri = NAMESPACE + "F27_Work_Creation"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -650,7 +650,7 @@ class F28ExpressionCreation(E65Creation, E12Production):
     R19 created a realisation of (was realised through): F1 Work
     """
 
-    class_uri = LRMNAMESPACE + "F28_Expression_Creation"
+    class_uri = NAMESPACE + "F28_Expression_Creation"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -694,7 +694,7 @@ class F30ManifestationCreation(F28ExpressionCreation):
     R24 created (was created through): F3 Manifestation
     """
 
-    class_uri = LRMNAMESPACE + "F30_Manifestation_Creation"
+    class_uri = NAMESPACE + "F30_Manifestation_Creation"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -722,7 +722,7 @@ class F31Performance(E7Activity):
 
     R66 included performed version of (had a performed version through): E89 Propositional Object
     """
-    class_uri = LRMNAMESPACE + "F31_Performance"
+    class_uri = NAMESPACE + "F31_Performance"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

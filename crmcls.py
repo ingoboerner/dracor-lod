@@ -10,9 +10,9 @@ from lrmoo import F3Manifestation
 from crmdig import D1DigitalObject, D14Software
 from pem import PE43EncodingType
 
-CLSCORNAMESPACE = "https://clscor.io/ontologies/CRMcls/"
+NAMESPACE = "https://clscor.io/ontologies/CRMcls/"
 
-CLS = Namespace(CLSCORNAMESPACE)
+CLS = Namespace(NAMESPACE)
 
 
 class X1Corpus(D1DigitalObject, F3Manifestation):
@@ -21,7 +21,7 @@ class X1Corpus(D1DigitalObject, F3Manifestation):
     SubClassOf crmdig: D1 Digital Object AND lrm: F3 Manifestation
     """
 
-    class_uri = CLSCORNAMESPACE + "X1_Corpus"
+    class_uri = NAMESPACE + "X1_Corpus"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -33,7 +33,7 @@ class X2CorpusDocument(D1DigitalObject, F3Manifestation):
     SubClassOf crmdig: D1 Digital Object AND lrm: F3 Manifestation
     """
 
-    class_uri = CLSCORNAMESPACE + "X2_Corpus_Document"
+    class_uri = NAMESPACE + "X2_Corpus_Document"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -45,7 +45,7 @@ class X3Feature(E73InformationObject, E55Type):
     SubClassOf crm: E73 Information Object AND crm: E55 Type
     """
 
-    class_uri = CLSCORNAMESPACE + "X3_Feature"
+    class_uri = NAMESPACE + "X3_Feature"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -56,7 +56,7 @@ class X4Project(E7Activity):
 
     SubClassOf crm: E7 Activity
     """
-    class_uri = CLSCORNAMESPACE + "X4_Project"
+    class_uri = NAMESPACE + "X4_Project"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -67,7 +67,7 @@ class X5ResearchActivity(E7Activity):
 
     SubClassOf crm: E7 Activity
     """
-    class_uri = CLSCORNAMESPACE + "X5_Research_Activity"
+    class_uri = NAMESPACE + "X5_Research_Activity"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -78,7 +78,7 @@ class X6Method(E29DesignOrProcedure):
 
     SubClassOf crm: E29 Design or Procedure
     """
-    class_uri = CLSCORNAMESPACE + "X6_Method"
+    class_uri = NAMESPACE + "X6_Method"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -91,7 +91,7 @@ class X7Format(PE43EncodingType):
 
     TODO: this does not inherit from anything. PE43 is a subclass of crm: E55 Type; I inherit here directly (cf. X8!)
     """
-    class_uri = CLSCORNAMESPACE + "X7_Format"
+    class_uri = NAMESPACE + "X7_Format"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -104,7 +104,7 @@ class X8Schema(D14Software):
 
     TODO: check inheritance; because equivalent, I also inherit from D14; but maybe inherit directly from pem: PE38
     """
-    class_uri = CLSCORNAMESPACE + "X8_Schema"
+    class_uri = NAMESPACE + "X8_Schema"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -115,7 +115,7 @@ class X9CorpusDescription(E83TypeCreation):
 
     subClassOf E83 Type Creation
     """
-    class_uri = CLSCORNAMESPACE + "X9_Corpus_Description"
+    class_uri = NAMESPACE + "X9_Corpus_Description"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -126,7 +126,7 @@ class X10EncodingPattern(E90SymbolicObject):
 
     SubClassOf crm: E90 Symbolic Object
     """
-    class_uri = CLSCORNAMESPACE + "X10_Encoding_Pattern"
+    class_uri = NAMESPACE + "X10_Encoding_Pattern"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -138,7 +138,7 @@ class X11PrototypicalDocument(E55Type):
     SubClassOf crm: E55 Type
     """
 
-    class_uri = CLSCORNAMESPACE + "X11_Prototypical_Document"
+    class_uri = NAMESPACE + "X11_Prototypical_Document"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

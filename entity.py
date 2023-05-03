@@ -6,7 +6,10 @@ import logging
 from marshmallow import Schema, fields, ValidationError
 from sparql import DB
 from rdflib import Graph, Literal, URIRef, RDF, RDFS
-from dracor import DraCor
+from ontologies import Ontologies
+
+ONTOLOGIES = Ontologies()
+PREFIXES = ONTOLOGIES.get_prefixes_uris()
 
 
 class LabelSchema(Schema):
@@ -117,7 +120,7 @@ class Entity:
         g = Graph()
 
         # add the namespaces
-        for item in DraCor.ontologies:
+        for item in PREFIXES:
             g.namespace_manager.bind(item["prefix"], URIRef(item["uri"]))
 
         return g
