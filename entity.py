@@ -5,7 +5,7 @@ Provides basic functionality of all entities.
 import logging
 from marshmallow import Schema, fields, ValidationError
 from sparql import DB
-from rdflib import Graph, Literal, URIRef, RDF, RDFS
+from rdflib import Graph, Literal, URIRef, RDF, RDFS, XSD
 from ontologies import Ontologies
 
 ONTOLOGIES = Ontologies()
@@ -355,6 +355,92 @@ class Entity:
         else:
             logging.warning("No entities provided. Will not create anything.")
             return Graph()
+
+    def generate_property_to_literal_value_triples(self,
+                                                   value,
+                                                   domain_uri: str = None,
+                                                   prop: URIRef = None,
+                                                   datatype: URIRef = None,
+                                                   lang:str = None) -> Graph:
+        """Add triples to graph: self.uri prop literal^^datatype.
+
+        Args:
+            value: Value/Content as range
+            domain_uri (str): URI of the domain.
+            prop (URIRef): Property. Expected rdflib.term.URIRef, e.g. CRM.P2_has_note
+            datatype (URIRef): Expect an URIRef, e.g. XSD.int
+            lang (str, optional): Language. Will add to Literal if provided.
+
+        Returns:
+            Graph: Triples in a graph
+
+        """
+        if prop:
+            assert type(prop) == URIRef, "Invalid type. Expected property prop as URIRef."
+
+        if domain_uri:
+            domain_e = URIRef(domain_uri)
+        else:
+            # Default will be self.uri, which means: this entity
+            if self.uri:
+                domain_e = URIRef(self.uri)
+            else:
+                logging.warning("No self.uri set. Will not create anything.")
+                return Graph()
+
+        if datatype:
+            assert type(datatype) == URIRef, "Expected URIRef as datatype."
+
+        if lang:
+            assert type(lang) == str, "Expected language as string."
+
+        if value:
+            # results graph
+            g = Graph()
+
+            if datatype and lang:
+                g.add((domain_e, prop, Literal(value, datatype=datatype, lang=lang)))
+            elif datatype and lang is None:
+                g.add((domain_e, prop, Literal(value, datatype=datatype)))
+            elif lang and datatype is None:
+                g.add((domain_e, prop, Literal(value, lang=lang)))
+            else:
+                g.add((domain_e, prop, Literal(value)))
+
+            return g
+
+        else:
+            logging.warning("No value provided. Will not create anything.")
+            return Graph()
+
+    def add_property_to_literal_value_triple(self,
+                                             value,
+                                             prop: URIRef = None,
+                                             datatype: str = None,
+                                             lang: str = None) -> bool:
+
+        """Add triple s property value^^datatype to self.graph
+
+        Args:
+            value: Value as range
+            prop (URIRef, optional): Property
+            datatype (str, optional): Datatype that will be added to Literal. Use XSD datatypes.
+            lang (str, optional): Language. If added will add language to Literal.
+
+        Returns:
+            bool: True if successful
+
+        """
+        if datatype:
+            assert type(datatype) == str, "Expected datatype as string."
+            datatype_uri = XSD[datatype]
+        else:
+            datatype_uri = None
+
+        g = self.generate_property_to_literal_value_triples(value, prop=prop, datatype=datatype_uri, lang=lang)
+        self.graph = self.graph + g
+
+        return True
 
     def add_triples(self,
                     entities: list = None,

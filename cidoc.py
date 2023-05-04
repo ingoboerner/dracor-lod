@@ -107,12 +107,7 @@ class E1CRMEntity(Entity):
         """
         prop = CRM.P3_has_note
 
-        if lang:
-            self.graph.add((URIRef(self.uri), prop, Literal(content, lang=lang)))
-        else:
-            self.graph.add((URIRef(self.uri), prop, Literal(content)))
-
-        return True
+        return self.add_property_to_literal_value_triple(content, prop=prop, lang=lang)
 
     def p48_has_preferred_identifier(self, *entities, uris: list = None) -> bool:
         """P48 has preferred identifier (is preferred identifier of): E42 Identifier
@@ -592,12 +587,7 @@ class E90SymbolicObject(E28ConceptualObject, E72LegalObject):
         """
         prop = CRM.P190_has_symbolic_content
 
-        if lang:
-            self.graph.add((URIRef(self.uri), prop, Literal(content, lang=lang)))
-        else:
-            self.graph.add((URIRef(self.uri), prop, Literal(content)))
-
-        return True
+        return self.add_property_to_literal_value_triple(content, prop=prop, lang=lang)
 
 
 class E73InformationObject(E90SymbolicObject, E89PropositionalObject):
@@ -1581,13 +1571,7 @@ class E54Dimension(E1CRMEntity):
         """
         prop = CRM.P90_has_value
 
-        if datatype:
-            datatype_uri = XSD[datatype]
-            self.graph.add((URIRef(self.uri), prop, Literal(content, datatype=datatype_uri)))
-        else:
-            self.graph.add((URIRef(self.uri), prop, Literal(content)))
-
-        return True
+        return self.add_property_to_literal_value_triple(content, prop=prop, datatype=datatype)
 
     def p91_has_unit(self, *entities, uris: list = None) -> bool:
         """P91 has unit (is unit of): E58 Measurement Unit
@@ -2140,12 +2124,7 @@ class E52TimeSpan(E1CRMEntity):
         """
         prop = CRM.P79_beginning_is_qualified_by
 
-        if lang:
-            self.graph.add((URIRef(self.uri), prop, Literal(content, lang=lang)))
-        else:
-            self.graph.add((URIRef(self.uri), prop, Literal(content)))
-
-        return True
+        return self.add_property_to_literal_value_triple(content, prop=prop, lang=lang)
 
     def p80_end_is_qualified_by(self, content: str, lang: str = None) -> bool:
         """P80 end is qualified by: E62 String
@@ -2178,13 +2157,7 @@ class E52TimeSpan(E1CRMEntity):
         """
         prop = CRM.P81_ongoing_throughout
 
-        if datatype:
-            datatype_uri = XSD[datatype]
-            self.graph.add((URIRef(self.uri), prop, Literal(value, datatype=datatype_uri)))
-        else:
-            self.graph.add((URIRef(self.uri), prop, Literal(value)))
-
-        return True
+        return self.add_property_to_literal_value_triple(value, prop=prop, datatype=datatype)
 
     def p81a_end_of_the_begin(self, value: str, datatype: str = None) -> bool:
         """P81a end of the begin: Literal
@@ -2198,13 +2171,7 @@ class E52TimeSpan(E1CRMEntity):
         """
         prop = CRM.P81a_end_of_the_begin
 
-        if datatype:
-            datatype_uri = XSD[datatype]
-            self.graph.add((URIRef(self.uri), prop, Literal(value, datatype=datatype_uri)))
-        else:
-            self.graph.add((URIRef(self.uri), prop, Literal(value)))
-
-        return True
+        return self.add_property_to_literal_value_triple(value, prop=prop, datatype=datatype)
 
     # P81b
     def p81b_begin_of_the_end(self, value: str, datatype: str = None) -> bool:
@@ -2219,13 +2186,7 @@ class E52TimeSpan(E1CRMEntity):
         """
         prop = CRM.P81b_begin_of_the_end
 
-        if datatype:
-            datatype_uri = XSD[datatype]
-            self.graph.add((URIRef(self.uri), prop, Literal(value, datatype=datatype_uri)))
-        else:
-            self.graph.add((URIRef(self.uri), prop, Literal(value)))
-
-        return True
+        return self.add_property_to_literal_value_triple(value, prop=prop, datatype=datatype)
 
     def p82_at_some_time_within(self, value: str, datatype: str = None) -> bool:
         """P82 at some time within: E61 Time Primitive
@@ -2239,13 +2200,7 @@ class E52TimeSpan(E1CRMEntity):
         """
         prop = CRM.P82_at_some_time_within
 
-        if datatype:
-            datatype_uri = XSD[datatype]
-            self.graph.add((URIRef(self.uri), prop, Literal(value, datatype=datatype_uri)))
-        else:
-            self.graph.add((URIRef(self.uri), prop, Literal(value)))
-
-        return True
+        return self.add_property_to_literal_value_triple(value, prop=prop, datatype=datatype)
 
     def p82a_begin_of_the_begin(self, value: str, datatype: str = None) -> bool:
         """P82a begin of the begin: Literal
@@ -2259,15 +2214,8 @@ class E52TimeSpan(E1CRMEntity):
         """
         prop = CRM.P82a_begin_of_the_begin
 
-        if datatype:
-            datatype_uri = XSD[datatype]
-            self.graph.add((URIRef(self.uri), prop, Literal(value, datatype=datatype_uri)))
-        else:
-            self.graph.add((URIRef(self.uri), prop, Literal(value)))
+        return self.add_property_to_literal_value_triple(value, prop=prop, datatype=datatype)
 
-        return True
-
-    # P82b
     def p82b_end_of_the_end(self, value: str, datatype: str = None) -> bool:
         """P82b end of the end: Literal
 
@@ -2280,13 +2228,7 @@ class E52TimeSpan(E1CRMEntity):
         """
         prop = CRM.P82b_end_of_the_end
 
-        if datatype:
-            datatype_uri = XSD[datatype]
-            self.graph.add((URIRef(self.uri), prop, Literal(value, datatype=datatype_uri)))
-        else:
-            self.graph.add((URIRef(self.uri), prop, Literal(value)))
-
-        return True
+        return self.add_property_to_literal_value_triple(value, prop=prop, datatype=datatype)
 
     def p86_falls_within(self, *entities, uris: list = None) -> bool:
         """P86 falls within (contains): E52 Time-Span
