@@ -1154,7 +1154,13 @@ class E4Period(E2TemporalEntity):
         prop = CRM.P7_took_place_at
         prop_inverse = CRM.P7i_witnessed
 
-        return self.add_triples(entities=list(entities), uris=uris, prop=prop, prop_inverse=prop_inverse)
+        range_class_constraint = E53Place
+
+        return self.add_triples(entities=list(entities),
+                                uris=uris,
+                                prop=prop,
+                                prop_inverse=prop_inverse,
+                                range_class_constraint=range_class_constraint)
 
     def p9_consists_of(self, *entities, uris: list = None) -> bool:
         """P9 consists of (forms part of): E4 Period
@@ -1169,7 +1175,13 @@ class E4Period(E2TemporalEntity):
         prop = CRM.P9_consists_of
         prop_inverse = CRM.P9i_forms_part_of
 
-        return self.add_triples(entities=list(entities), uris=uris, prop=prop, prop_inverse=prop_inverse)
+        range_class_constraint = E4Period
+
+        return self.add_triples(entities=list(entities),
+                                uris=uris,
+                                prop=prop,
+                                prop_inverse=prop_inverse,
+                                range_class_constraint=range_class_constraint)
 
 
 class E5Event(E4Period):
@@ -1649,7 +1661,13 @@ class E39Actor(E77PersistentItem):
         prop = CRM.P74_has_current_or_former_residence
         prop_inverse = CRM.P74i_is_current_or_former_residence_of
 
-        return self.add_triples(entities=list(entities), uris=uris, prop=prop, prop_inverse=prop_inverse)
+        range_class_constraint = E53Place
+
+        return self.add_triples(entities=list(entities),
+                                uris=uris,
+                                prop=prop,
+                                prop_inverse=prop_inverse,
+                                range_class_constraint=range_class_constraint)
 
     def p75_possesses(self, *entities, uris: list = None) -> bool:
         """P75 possesses (is possessed by): E30 Right
