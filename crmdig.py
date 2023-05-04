@@ -7,7 +7,7 @@ Author: Ingo Börner
 
 
 from rdflib import Namespace
-from cidoc import E73InformationObject, E54Dimension, E11Modification, E65Creation, E16Measurement
+from cidoc import E73InformationObject, E54Dimension, E11Modification, E65Creation, E16Measurement, E55Type
 
 # Base uri used for Class URIs
 NAMESPACE = "http://www.ics.forth.gr/isl/CRMdig/"
@@ -39,7 +39,13 @@ class D1DigitalObject(E73InformationObject):
         prop = DIG.L10i_was_input_of
         prop_inverse = DIG.L10_had_input
 
-        return self.add_triples(entities=list(entities), uris=uris, prop=prop, prop_inverse=prop_inverse)
+        range_class_constraint = D7DigitalMachineEvent
+
+        return self.add_triples(entities=list(entities),
+                                uris=uris,
+                                prop=prop,
+                                prop_inverse=prop_inverse,
+                                range_class_constraint=range_class_constraint)
 
     def l11i_was_output_of(self, *entities, uris: list = None) -> bool:
         """L11i was output of (had output): D7 Digital Machine Event
@@ -54,7 +60,13 @@ class D1DigitalObject(E73InformationObject):
         prop = DIG.L10i_was_output_of
         prop_inverse = DIG.L11_had_output
 
-        return self.add_triples(entities=list(entities), uris=uris, prop=prop, prop_inverse=prop_inverse)
+        range_class_constraint = D7DigitalMachineEvent
+
+        return self.add_triples(entities=list(entities),
+                                uris=uris,
+                                prop=prop,
+                                prop_inverse=prop_inverse,
+                                range_class_constraint=range_class_constraint)
 
     def l2i_was_source_for(self, *entities, uris: list = None) -> bool:
         """L2i was source for (used as source): D10 Software Execution
@@ -69,7 +81,13 @@ class D1DigitalObject(E73InformationObject):
         prop = DIG.L2i_was_source_for
         prop_inverse = DIG.L2_used_as_source
 
-        return self.add_triples(entities=list(entities), uris=uris, prop=prop, prop_inverse=prop_inverse)
+        range_class_constraint = D10SoftwareExecution
+
+        return self.add_triples(entities=list(entities),
+                                uris=uris,
+                                prop=prop,
+                                prop_inverse=prop_inverse,
+                                range_class_constraint=range_class_constraint)
 
 
 class D7DigitalMachineEvent(E11Modification, E65Creation):
@@ -101,7 +119,13 @@ class D7DigitalMachineEvent(E11Modification, E65Creation):
         prop = DIG.L10_had_input
         prop_inverse = DIG.L10i_was_input_of
 
-        return self.add_triples(entities=list(entities), uris=uris, prop=prop, prop_inverse=prop_inverse)
+        range_class_constraint = D1DigitalObject
+
+        return self.add_triples(entities=list(entities),
+                                uris=uris,
+                                prop=prop,
+                                prop_inverse=prop_inverse,
+                                range_class_constraint=range_class_constraint)
 
     def l11_had_output(self, *entities, uris: list = None) -> bool:
         """L11 had output (was output of): D1 Digital Object
@@ -116,7 +140,13 @@ class D7DigitalMachineEvent(E11Modification, E65Creation):
         prop = DIG.L11_had_output
         prop_inverse = DIG.L10i_was_output_of
 
-        return self.add_triples(entities=list(entities), uris=uris, prop=prop, prop_inverse=prop_inverse)
+        range_class_constraint = D1DigitalObject
+
+        return self.add_triples(entities=list(entities),
+                                uris=uris,
+                                prop=prop,
+                                prop_inverse=prop_inverse,
+                                range_class_constraint=range_class_constraint)
 
     def l23_used_software_or_firmware(self, *entities, uris: list = None) -> bool:
         """L23 used software or firmware (was software or firmware used by): D14 Software
@@ -131,7 +161,13 @@ class D7DigitalMachineEvent(E11Modification, E65Creation):
         prop = DIG.L23_used_software_or_firmware
         prop_inverse = DIG.L23i_was_software_or_firmware_used_by
 
-        return self.add_triples(entities=list(entities), uris=uris, prop=prop, prop_inverse=prop_inverse)
+        range_class_constraint = D14Software
+
+        return self.add_triples(entities=list(entities),
+                                uris=uris,
+                                prop=prop,
+                                prop_inverse=prop_inverse,
+                                range_class_constraint=range_class_constraint)
 
 
 class D9DataObject(D1DigitalObject, E54Dimension):
@@ -145,7 +181,7 @@ class D9DataObject(D1DigitalObject, E54Dimension):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-    def l20i_has_created(self, *entities, uris: list = None) -> bool:
+    def l20i_was_created_by(self, *entities, uris: list = None) -> bool:
         """L20i was created by (has created): D11 Digital Measurement Event
 
         Args:
@@ -158,7 +194,13 @@ class D9DataObject(D1DigitalObject, E54Dimension):
         prop = DIG.L20i_was_created_by
         prop_inverse = DIG.L20_has_created
 
-        return self.add_triples(entities=list(entities), uris=uris, prop=prop, prop_inverse=prop_inverse)
+        range_class_constraint = D11DigitalMeasurementEvent
+
+        return self.add_triples(entities=list(entities),
+                                uris=uris,
+                                prop=prop,
+                                prop_inverse=prop_inverse,
+                                range_class_constraint=range_class_constraint)
 
 
 class D10SoftwareExecution(D7DigitalMachineEvent):
@@ -189,7 +231,13 @@ class D10SoftwareExecution(D7DigitalMachineEvent):
         prop = DIG.L2_used_as_source
         prop_inverse = DIG.L2i_was_source_for
 
-        return self.add_triples(entities=list(entities), uris=uris, prop=prop, prop_inverse=prop_inverse)
+        range_class_constraint = D1DigitalObject
+
+        return self.add_triples(entities=list(entities),
+                                uris=uris,
+                                prop=prop,
+                                prop_inverse=prop_inverse,
+                                range_class_constraint=range_class_constraint)
 
 
 class D11DigitalMeasurementEvent(D7DigitalMachineEvent, E16Measurement):
@@ -218,7 +266,13 @@ class D11DigitalMeasurementEvent(D7DigitalMachineEvent, E16Measurement):
         prop = DIG.L17_measured_thing_of_type
         prop_inverse = DIG.L17i_was_type_of_thing_measured_by
 
-        return self.add_triples(entities=list(entities), uris=uris, prop=prop, prop_inverse=prop_inverse)
+        range_class_constraint = E55Type
+
+        return self.add_triples(entities=list(entities),
+                                uris=uris,
+                                prop=prop,
+                                prop_inverse=prop_inverse,
+                                range_class_constraint=range_class_constraint)
 
     def l20_has_created(self, *entities, uris: list = None) -> bool:
         """L20 has created (was created by): D9 Data Object
@@ -233,7 +287,13 @@ class D11DigitalMeasurementEvent(D7DigitalMachineEvent, E16Measurement):
         prop = DIG.L20_has_created
         prop_inverse = DIG.L20i_was_created_by
 
-        return self.add_triples(entities=list(entities), uris=uris, prop=prop, prop_inverse=prop_inverse)
+        range_class_constraint = D9DataObject
+
+        return self.add_triples(entities=list(entities),
+                                uris=uris,
+                                prop=prop,
+                                prop_inverse=prop_inverse,
+                                range_class_constraint=range_class_constraint)
 
 
 class D14Software(D1DigitalObject):
@@ -259,5 +319,11 @@ class D14Software(D1DigitalObject):
         prop = DIG.L23i_was_software_or_firmware_used_by
         prop_inverse = DIG.L23_used_software_or_firmware
 
-        return self.add_triples(entities=list(entities), uris=uris, prop=prop, prop_inverse=prop_inverse)
+        range_class_constraint = D7DigitalMachineEvent
+
+        return self.add_triples(entities=list(entities),
+                                uris=uris,
+                                prop=prop,
+                                prop_inverse=prop_inverse,
+                                range_class_constraint=range_class_constraint)
 

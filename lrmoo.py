@@ -7,7 +7,7 @@ Author: Ingo Börner
 
 from rdflib import Namespace
 from cidoc import E89PropositionalObject, E73InformationObject, E24PhysicalHumanMadeThing, E65Creation, E12Production, \
-    E7Activity
+    E7Activity, E90SymbolicObject, E55Type, E54Dimension
 
 # Base uri used for Class URIs
 NAMESPACE = "http://www.cidoc-crm.org/cidoc-crm/lrmoo/"
@@ -49,7 +49,13 @@ class F1Work(E89PropositionalObject):
         prop = LRM.R1_is_logical_successor_of
         prop_inverse = LRM.R1i_has_successor
 
-        return self.add_triples(entities=list(entities), uris=uris, prop=prop, prop_inverse=prop_inverse)
+        range_class_constraint = F1Work
+
+        return self.add_triples(entities=list(entities),
+                                uris=uris,
+                                prop=prop,
+                                prop_inverse=prop_inverse,
+                                range_class_constraint=range_class_constraint)
 
     def r1i_has_successor(self, *entities, uris: list = None) -> bool:
         """R1i has successor (is logical successor of): F1 Work
@@ -64,7 +70,13 @@ class F1Work(E89PropositionalObject):
         prop = LRM.R1i_has_successor
         prop_inverse = LRM.R1_is_logical_successor_of
 
-        return self.add_triples(entities=list(entities), uris=uris, prop=prop, prop_inverse=prop_inverse)
+        range_class_constraint = F1Work
+
+        return self.add_triples(entities=list(entities),
+                                uris=uris,
+                                prop=prop,
+                                prop_inverse=prop_inverse,
+                                range_class_constraint=range_class_constraint)
 
     def r2_is_derivative_of(self, *entities, uris: list = None) -> bool:
         """R2 is derivative of (has derivative): F1 Work
@@ -79,7 +91,13 @@ class F1Work(E89PropositionalObject):
         prop = LRM.R2_is_derivative_of
         prop_inverse = LRM.R2i_has_derivative
 
-        return self.add_triples(entities=list(entities), uris=uris, prop=prop, prop_inverse=prop_inverse)
+        range_class_constraint = F1Work
+
+        return self.add_triples(entities=list(entities),
+                                uris=uris,
+                                prop=prop,
+                                prop_inverse=prop_inverse,
+                                range_class_constraint=range_class_constraint)
 
     def r2i_has_derivative(self, *entities, uris: list = None) -> bool:
         """R2i has derivative (is derivative of): F1 Work
@@ -94,7 +112,13 @@ class F1Work(E89PropositionalObject):
         prop = LRM.R2i_has_derivative
         prop_inverse = LRM.R2_is_derivative_of
 
-        return self.add_triples(entities=list(entities), uris=uris, prop=prop, prop_inverse=prop_inverse)
+        range_class_constraint = F1Work
+
+        return self.add_triples(entities=list(entities),
+                                uris=uris,
+                                prop=prop,
+                                prop_inverse=prop_inverse,
+                                range_class_constraint=range_class_constraint)
 
     def r3_is_realised_in(self, *entities, uris: list = None) -> bool:
         """R3 is realised in (realises): F2 Expression
@@ -109,7 +133,13 @@ class F1Work(E89PropositionalObject):
         prop = LRM.R3_is_realised_in
         prop_inverse = LRM.R3i_realises
 
-        return self.add_triples(entities=list(entities), uris=uris, prop=prop, prop_inverse=prop_inverse)
+        range_class_constraint = F1Work
+
+        return self.add_triples(entities=list(entities),
+                                uris=uris,
+                                prop=prop,
+                                prop_inverse=prop_inverse,
+                                range_class_constraint=range_class_constraint)
 
     def r10_has_member(self, *entities, uris: list = None) -> bool:
         """R10 has member (is member of): F1 Work
@@ -124,7 +154,13 @@ class F1Work(E89PropositionalObject):
         prop = LRM.R10_has_member
         prop_inverse = LRM.R10i_is_member_of
 
-        return self.add_triples(entities=list(entities), uris=uris, prop=prop, prop_inverse=prop_inverse)
+        range_class_constraint = F1Work
+
+        return self.add_triples(entities=list(entities),
+                                uris=uris,
+                                prop=prop,
+                                prop_inverse=prop_inverse,
+                                range_class_constraint=range_class_constraint)
 
     def r10i_is_member_of(self, *entities, uris: list = None) -> bool:
         """R10i is member of (has member): F1 Work
@@ -139,7 +175,13 @@ class F1Work(E89PropositionalObject):
         prop = LRM.R10i_is_member_of
         prop_inverse = LRM.R10_has_member
 
-        return self.add_triples(entities=list(entities), uris=uris, prop=prop, prop_inverse=prop_inverse)
+        range_class_constraint = F1Work
+
+        return self.add_triples(entities=list(entities),
+                                uris=uris,
+                                prop=prop,
+                                prop_inverse=prop_inverse,
+                                range_class_constraint=range_class_constraint)
 
     def r67_has_part(self, *entities, uris: list = None) -> bool:
         """R67 has part (forms part of): F1 Work
@@ -154,7 +196,13 @@ class F1Work(E89PropositionalObject):
         prop = LRM.R67_has_part
         prop_inverse = LRM.R67i_forms_part_of
 
-        return self.add_triples(entities=list(entities), uris=uris, prop=prop, prop_inverse=prop_inverse)
+        range_class_constraint = F1Work
+
+        return self.add_triples(entities=list(entities),
+                                uris=uris,
+                                prop=prop,
+                                prop_inverse=prop_inverse,
+                                range_class_constraint=range_class_constraint)
 
     def r67i_forms_part_of(self, *entities, uris: list = None) -> bool:
         """R67i forms part of (has part): F1 Work
@@ -169,7 +217,13 @@ class F1Work(E89PropositionalObject):
         prop = LRM.R67i_forms_part_of
         prop_inverse = LRM.R67_has_part
 
-        return self.add_triples(entities=list(entities), uris=uris, prop=prop, prop_inverse=prop_inverse)
+        range_class_constraint = F1Work
+
+        return self.add_triples(entities=list(entities),
+                                uris=uris,
+                                prop=prop,
+                                prop_inverse=prop_inverse,
+                                range_class_constraint=range_class_constraint)
 
     def r68_is_inspired_by(self, *entities, uris: list = None) -> bool:
         """R68 is inspired by (is inspiration for): F1 Work
@@ -184,7 +238,13 @@ class F1Work(E89PropositionalObject):
         prop = LRM.R68_is_inspired_by
         prop_inverse = LRM.R68i_is_inspiration_for
 
-        return self.add_triples(entities=list(entities), uris=uris, prop=prop, prop_inverse=prop_inverse)
+        range_class_constraint = F1Work
+
+        return self.add_triples(entities=list(entities),
+                                uris=uris,
+                                prop=prop,
+                                prop_inverse=prop_inverse,
+                                range_class_constraint=range_class_constraint)
 
     def r68i_is_inspiration_for(self, *entities, uris: list = None) -> bool:
         """R68i is inspiration for (is inspired by): F1 Work
@@ -199,7 +259,13 @@ class F1Work(E89PropositionalObject):
         prop = LRM.R68i_is_inspiration_for
         prop_inverse = LRM.R68_is_inspired_by
 
-        return self.add_triples(entities=list(entities), uris=uris, prop=prop, prop_inverse=prop_inverse)
+        range_class_constraint = F1Work
+
+        return self.add_triples(entities=list(entities),
+                                uris=uris,
+                                prop=prop,
+                                prop_inverse=prop_inverse,
+                                range_class_constraint=range_class_constraint)
 
     def r73_takes_representative_attribute_from(self, *entities, uris: list = None) -> bool:
         """R73 takes representative attribute from (bears representative attribute for): F2 Expression
@@ -214,7 +280,13 @@ class F1Work(E89PropositionalObject):
         prop = LRM.R73_takes_representative_attribute_from
         prop_inverse = LRM.R73i_bears_representative_attribute_for
 
-        return self.add_triples(entities=list(entities), uris=uris, prop=prop, prop_inverse=prop_inverse)
+        range_class_constraint = F2Expression
+
+        return self.add_triples(entities=list(entities),
+                                uris=uris,
+                                prop=prop,
+                                prop_inverse=prop_inverse,
+                                range_class_constraint=range_class_constraint)
 
     def r74_uses_expression_of(self, *entities, uris: list = None) -> bool:
         """R74 uses expression of (has expression used in): F1 Work
@@ -229,7 +301,13 @@ class F1Work(E89PropositionalObject):
         prop = LRM.R74_uses_expression_of
         prop_inverse = LRM.R74i_has_expression_used_in
 
-        return self.add_triples(entities=list(entities), uris=uris, prop=prop, prop_inverse=prop_inverse)
+        range_class_constraint = F1Work
+
+        return self.add_triples(entities=list(entities),
+                                uris=uris,
+                                prop=prop,
+                                prop_inverse=prop_inverse,
+                                range_class_constraint=range_class_constraint)
 
     def r74i_has_expression_used_in(self, *entities, uris: list = None) -> bool:
         """R74i has expression used in (uses expression of): F1 Work
@@ -244,7 +322,13 @@ class F1Work(E89PropositionalObject):
         prop = LRM.R74i_has_expression_used_in
         prop_inverse = LRM.R74_uses_expression_of
 
-        return self.add_triples(entities=list(entities), uris=uris, prop=prop, prop_inverse=prop_inverse)
+        range_class_constraint = F1Work
+
+        return self.add_triples(entities=list(entities),
+                                uris=uris,
+                                prop=prop,
+                                prop_inverse=prop_inverse,
+                                range_class_constraint=range_class_constraint)
 
     def r16i_was_created_by(self, *entities, uris: list = None) -> bool:
         """R16i created (was created by): F27 Work Creation
@@ -259,7 +343,13 @@ class F1Work(E89PropositionalObject):
         prop = LRM.R16i_was_created_by
         prop_inverse = LRM.R16_created
 
-        return self.add_triples(entities=list(entities), uris=uris, prop=prop, prop_inverse=prop_inverse)
+        range_class_constraint = F27WorkCreation
+
+        return self.add_triples(entities=list(entities),
+                                uris=uris,
+                                prop=prop,
+                                prop_inverse=prop_inverse,
+                                range_class_constraint=range_class_constraint)
 
     def r19i_was_realised_through(self, *entities, uris: list = None) -> bool:
         """R19i was realised through (created a realisation of): F28 Expression Creation
@@ -274,7 +364,13 @@ class F1Work(E89PropositionalObject):
         prop = LRM.R19i_was_realised_through
         prop_inverse = LRM.R19_created_a_realisation_of
 
-        return self.add_triples(entities=list(entities), uris=uris, prop=prop, prop_inverse=prop_inverse)
+        range_class_constraint = F28ExpressionCreation
+
+        return self.add_triples(entities=list(entities),
+                                uris=uris,
+                                prop=prop,
+                                prop_inverse=prop_inverse,
+                                range_class_constraint=range_class_constraint)
 
 
 class F2Expression(E73InformationObject):
@@ -307,7 +403,13 @@ class F2Expression(E73InformationObject):
         prop = LRM.R5_has_component
         prop_inverse = LRM.R5i_is_component_of
 
-        return self.add_triples(entities=list(entities), uris=uris, prop=prop, prop_inverse=prop_inverse)
+        range_class_constraint = F2Expression
+
+        return self.add_triples(entities=list(entities),
+                                uris=uris,
+                                prop=prop,
+                                prop_inverse=prop_inverse,
+                                range_class_constraint=range_class_constraint)
 
     def r5i_is_component_of(self, *entities, uris: list = None) -> bool:
         """R5i is component of (has component): F2 Expression
@@ -322,7 +424,13 @@ class F2Expression(E73InformationObject):
         prop = LRM.R5i_is_component_of
         prop_inverse = LRM.R5_has_component
 
-        return self.add_triples(entities=list(entities), uris=uris, prop=prop, prop_inverse=prop_inverse)
+        range_class_constraint = F2Expression
+
+        return self.add_triples(entities=list(entities),
+                                uris=uris,
+                                prop=prop,
+                                prop_inverse=prop_inverse,
+                                range_class_constraint=range_class_constraint)
 
     def r15_has_fragment(self, *entities, uris: list = None) -> bool:
         """R15 has fragment (is fragment of): E90 Symbolic Object
@@ -337,7 +445,13 @@ class F2Expression(E73InformationObject):
         prop = LRM.R15_has_fragment
         prop_inverse = LRM.R15i_is_fragment_of
 
-        return self.add_triples(entities=list(entities), uris=uris, prop=prop, prop_inverse=prop_inverse)
+        range_class_constraint = E90SymbolicObject
+
+        return self.add_triples(entities=list(entities),
+                                uris=uris,
+                                prop=prop,
+                                prop_inverse=prop_inverse,
+                                range_class_constraint=range_class_constraint)
 
     def r75_incorporates(self, *entities, uris: list = None) -> bool:
         """R75 incorporates (is incorporated in): F2 Expression
@@ -352,7 +466,13 @@ class F2Expression(E73InformationObject):
         prop = LRM.R75_incorporates
         prop_inverse = LRM.R75i_is_incorporated_in
 
-        return self.add_triples(entities=list(entities), uris=uris, prop=prop, prop_inverse=prop_inverse)
+        range_class_constraint = F2Expression
+
+        return self.add_triples(entities=list(entities),
+                                uris=uris,
+                                prop=prop,
+                                prop_inverse=prop_inverse,
+                                range_class_constraint=range_class_constraint)
 
     def r75i_is_incorporated_in(self, *entities, uris: list = None) -> bool:
         """R75i is incorporated in (incorporates): F2 Expression
@@ -367,7 +487,13 @@ class F2Expression(E73InformationObject):
         prop = LRM.R75i_is_incorporated_in
         prop_inverse = LRM.R75_incorporates
 
-        return self.add_triples(entities=list(entities), uris=uris, prop=prop, prop_inverse=prop_inverse)
+        range_class_constraint = F2Expression
+
+        return self.add_triples(entities=list(entities),
+                                uris=uris,
+                                prop=prop,
+                                prop_inverse=prop_inverse,
+                                range_class_constraint=range_class_constraint)
 
     def r76_is_derivative_of(self, *entities, uris: list = None) -> bool:
         """R76 is derivative of (has derivative): F2 Expression
@@ -382,7 +508,13 @@ class F2Expression(E73InformationObject):
         prop = LRM.R76_is_derivative_of
         prop_inverse = LRM.R76i_has_derivative
 
-        return self.add_triples(entities=list(entities), uris=uris, prop=prop, prop_inverse=prop_inverse)
+        range_class_constraint = F2Expression
+
+        return self.add_triples(entities=list(entities),
+                                uris=uris,
+                                prop=prop,
+                                prop_inverse=prop_inverse,
+                                range_class_constraint=range_class_constraint)
 
     def r76i_has_derivative(self, *entities, uris: list = None) -> bool:
         """R76i has derivative (is derivative of): F2 Expression
@@ -397,7 +529,13 @@ class F2Expression(E73InformationObject):
         prop = LRM.R76i_has_derivative
         prop_inverse = LRM.R76_is_derivative_of
 
-        return self.add_triples(entities=list(entities), uris=uris, prop=prop, prop_inverse=prop_inverse)
+        range_class_constraint = F2Expression
+
+        return self.add_triples(entities=list(entities),
+                                uris=uris,
+                                prop=prop,
+                                prop_inverse=prop_inverse,
+                                range_class_constraint=range_class_constraint)
 
     def r3i_realises(self, *entities, uris: list = None) -> bool:
         """R3i realises (is realised in): F1 Work
@@ -412,7 +550,13 @@ class F2Expression(E73InformationObject):
         prop = LRM.R3i_realises
         prop_inverse = LRM.R3_is_realised_in
 
-        return self.add_triples(entities=list(entities), uris=uris, prop=prop, prop_inverse=prop_inverse)
+        range_class_constraint = F1Work
+
+        return self.add_triples(entities=list(entities),
+                                uris=uris,
+                                prop=prop,
+                                prop_inverse=prop_inverse,
+                                range_class_constraint=range_class_constraint)
 
     def r73i_bears_representative_attribute_for(self, *entities, uris: list = None) -> bool:
         """R73i bears representative attribute for (takes representative attribute from): F1 Work
@@ -427,7 +571,13 @@ class F2Expression(E73InformationObject):
         prop = LRM.R73i_bears_representative_attribute_for
         prop_inverse = LRM.R73_takes_representative_attribute_from
 
-        return self.add_triples(entities=list(entities), uris=uris, prop=prop, prop_inverse=prop_inverse)
+        range_class_constraint = F1Work
+
+        return self.add_triples(entities=list(entities),
+                                uris=uris,
+                                prop=prop,
+                                prop_inverse=prop_inverse,
+                                range_class_constraint=range_class_constraint)
 
     def r4i_is_embodied_in(self, *entities, uris: list = None) -> bool:
         """R4i is embodied in (embodies): F3 Manifestation
@@ -442,7 +592,13 @@ class F2Expression(E73InformationObject):
         prop = LRM.R4i_is_embodied_in
         prop_inverse = LRM.R4_embodies
 
-        return self.add_triples(entities=list(entities), uris=uris, prop=prop, prop_inverse=prop_inverse)
+        range_class_constraint = F3Manifestation
+
+        return self.add_triples(entities=list(entities),
+                                uris=uris,
+                                prop=prop,
+                                prop_inverse=prop_inverse,
+                                range_class_constraint=range_class_constraint)
 
     def r17i_was_created_by(self, *entities, uris: list = None) -> bool:
         """R17i was created by (created): F28 Expression Creation
@@ -457,7 +613,13 @@ class F2Expression(E73InformationObject):
         prop = LRM.R17i_was_created_by
         prop_inverse = LRM.R17_created
 
-        return self.add_triples(entities=list(entities), uris=uris, prop=prop, prop_inverse=prop_inverse)
+        range_class_constraint = F28ExpressionCreation
+
+        return self.add_triples(entities=list(entities),
+                                uris=uris,
+                                prop=prop,
+                                prop_inverse=prop_inverse,
+                                range_class_constraint=range_class_constraint)
 
 
 class F3Manifestation(F2Expression):
@@ -489,7 +651,13 @@ class F3Manifestation(F2Expression):
         prop = LRM.R4_embodies
         prop_inverse = LRM.R4i_is_embodied_in
 
-        return self.add_triples(entities=list(entities), uris=uris, prop=prop, prop_inverse=prop_inverse)
+        range_class_constraint = F2Expression
+
+        return self.add_triples(entities=list(entities),
+                                uris=uris,
+                                prop=prop,
+                                prop_inverse=prop_inverse,
+                                range_class_constraint=range_class_constraint)
 
     def r69_has_physical_form(self, *entities, uris: list = None) -> bool:
         """R69 has physical form (is physical form of): E55 Type
@@ -504,7 +672,13 @@ class F3Manifestation(F2Expression):
         prop = LRM.R69_has_physical_form
         prop_inverse = LRM.R69i_is_physical_form_of
 
-        return self.add_triples(entities=list(entities), uris=uris, prop=prop, prop_inverse=prop_inverse)
+        range_class_constraint = E55Type
+
+        return self.add_triples(entities=list(entities),
+                                uris=uris,
+                                prop=prop,
+                                prop_inverse=prop_inverse,
+                                range_class_constraint=range_class_constraint)
 
     def r70_has_dimension(self, *entities, uris: list = None) -> bool:
         """R70 has dimension (is dimension of): E54 Dimension
@@ -519,7 +693,13 @@ class F3Manifestation(F2Expression):
         prop = LRM.R70_has_dimension
         prop_inverse = LRM.R70i_is_dimension_of
 
-        return self.add_triples(entities=list(entities), uris=uris, prop=prop, prop_inverse=prop_inverse)
+        range_class_constraint = E54Dimension
+
+        return self.add_triples(entities=list(entities),
+                                uris=uris,
+                                prop=prop,
+                                prop_inverse=prop_inverse,
+                                range_class_constraint=range_class_constraint)
 
     def r71_has_part(self, *entities, uris: list = None) -> bool:
         """R71 has part (is part of): F3 Manifestation
@@ -534,7 +714,13 @@ class F3Manifestation(F2Expression):
         prop = LRM.R71_has_part
         prop_inverse = LRM.R71i_is_part_of
 
-        return self.add_triples(entities=list(entities), uris=uris, prop=prop, prop_inverse=prop_inverse)
+        range_class_constraint = F3Manifestation
+
+        return self.add_triples(entities=list(entities),
+                                uris=uris,
+                                prop=prop,
+                                prop_inverse=prop_inverse,
+                                range_class_constraint=range_class_constraint)
 
     def r71i_is_part_of(self, *entities, uris: list = None) -> bool:
         """R71i is part of (has part): F3 Manifestation
@@ -549,7 +735,13 @@ class F3Manifestation(F2Expression):
         prop = LRM.R71i_is_part_of
         prop_inverse = LRM.R71_has_part
 
-        return self.add_triples(entities=list(entities), uris=uris, prop=prop, prop_inverse=prop_inverse)
+        range_class_constraint = F3Manifestation
+
+        return self.add_triples(entities=list(entities),
+                                uris=uris,
+                                prop=prop,
+                                prop_inverse=prop_inverse,
+                                range_class_constraint=range_class_constraint)
 
     def r7i_is_materialization_of(self, *entities, uris: list = None) -> bool:
         """R7i is materialized in (is materialization of): F5 Item
@@ -564,7 +756,13 @@ class F3Manifestation(F2Expression):
         prop = LRM.R7i_is_materialized_in
         prop_inverse = LRM.R7_is_materialization_of
 
-        return self.add_triples(entities=list(entities), uris=uris, prop=prop, prop_inverse=prop_inverse)
+        range_class_constraint = F5Item
+
+        return self.add_triples(entities=list(entities),
+                                uris=uris,
+                                prop=prop,
+                                prop_inverse=prop_inverse,
+                                range_class_constraint=range_class_constraint)
 
     def r24i_was_created_through(self, *entities, uris: list = None) -> bool:
         """R24i was created through (created): F30 Manifestation Creation
@@ -579,7 +777,13 @@ class F3Manifestation(F2Expression):
         prop = LRM.R24i_was_created_through
         prop_inverse = LRM.R24_created
 
-        return self.add_triples(entities=list(entities), uris=uris, prop=prop, prop_inverse=prop_inverse)
+        range_class_constraint = F30ManifestationCreation
+
+        return self.add_triples(entities=list(entities),
+                                uris=uris,
+                                prop=prop,
+                                prop_inverse=prop_inverse,
+                                range_class_constraint=range_class_constraint)
 
 
 class F5Item(E24PhysicalHumanMadeThing):
@@ -608,7 +812,13 @@ class F5Item(E24PhysicalHumanMadeThing):
         prop = LRM.R7_is_materialization_of
         prop_inverse = LRM.R7i_is_materialized_in
 
-        return self.add_triples(entities=list(entities), uris=uris, prop=prop, prop_inverse=prop_inverse)
+        range_class_constraint = F3Manifestation
+
+        return self.add_triples(entities=list(entities),
+                                uris=uris,
+                                prop=prop,
+                                prop_inverse=prop_inverse,
+                                range_class_constraint=range_class_constraint)
 
 
 class F27WorkCreation(E65Creation):
@@ -638,7 +848,13 @@ class F27WorkCreation(E65Creation):
         prop = LRM.R16_created
         prop_inverse = LRM.R16i_was_created_by
 
-        return self.add_triples(entities=list(entities), uris=uris, prop=prop, prop_inverse=prop_inverse)
+        range_class_constraint = F1Work
+
+        return self.add_triples(entities=list(entities),
+                                uris=uris,
+                                prop=prop,
+                                prop_inverse=prop_inverse,
+                                range_class_constraint=range_class_constraint)
 
 
 class F28ExpressionCreation(E65Creation, E12Production):
@@ -668,7 +884,13 @@ class F28ExpressionCreation(E65Creation, E12Production):
         prop = LRM.R17_created
         prop_inverse = LRM.R17i_was_created_by
 
-        return self.add_triples(entities=list(entities), uris=uris, prop=prop, prop_inverse=prop_inverse)
+        range_class_constraint = F2Expression
+
+        return self.add_triples(entities=list(entities),
+                                uris=uris,
+                                prop=prop,
+                                prop_inverse=prop_inverse,
+                                range_class_constraint=range_class_constraint)
 
     def r19_created_a_realisation_of(self, *entities, uris: list = None) -> bool:
         """R19 created a realisation of (was realised through): F1 Work
@@ -683,7 +905,13 @@ class F28ExpressionCreation(E65Creation, E12Production):
         prop = LRM.R19_created_a_realisation_of
         prop_inverse = LRM.R19i_was_realised_through
 
-        return self.add_triples(entities=list(entities), uris=uris, prop=prop, prop_inverse=prop_inverse)
+        range_class_constraint = F1Work
+
+        return self.add_triples(entities=list(entities),
+                                uris=uris,
+                                prop=prop,
+                                prop_inverse=prop_inverse,
+                                range_class_constraint=range_class_constraint)
 
 
 class F30ManifestationCreation(F28ExpressionCreation):
@@ -712,7 +940,13 @@ class F30ManifestationCreation(F28ExpressionCreation):
         prop = LRM.R24_created
         prop_inverse = LRM.R24i_was_created_through
 
-        return self.add_triples(entities=list(entities), uris=uris, prop=prop, prop_inverse=prop_inverse)
+        range_class_constraint = F3Manifestation
+
+        return self.add_triples(entities=list(entities),
+                                uris=uris,
+                                prop=prop,
+                                prop_inverse=prop_inverse,
+                                range_class_constraint=range_class_constraint)
 
 
 class F31Performance(E7Activity):
@@ -740,5 +974,11 @@ class F31Performance(E7Activity):
         prop = LRM.R66_included_performed_version_of
         prop_inverse = LRM.R66i_had_a_performed_version_through
 
-        return self.add_triples(entities=list(entities), uris=uris, prop=prop, prop_inverse=prop_inverse)
+        range_class_constraint = E89PropositionalObject
+
+        return self.add_triples(entities=list(entities),
+                                uris=uris,
+                                prop=prop,
+                                prop_inverse=prop_inverse,
+                                range_class_constraint=range_class_constraint)
 
