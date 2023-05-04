@@ -292,21 +292,26 @@ class Entity:
             return Graph()
 
     def generate_property_to_entity_triples(self,
-                                                entity,
-                                                domain_uri: str = None,
-                                                prop: URIRef = None,
-                                                prop_inverse: URIRef = None,
-                                                ) -> Graph:
+                                            entity,
+                                            domain_uri: str = None,
+                                            prop: URIRef = None,
+                                            prop_inverse: URIRef = None,
+                                            range_class_constraint = None,
+                                            ) -> Graph:
         """Add triples to graph: self.uri prop entity.uri.
 
         Args:
             entity: Instance of an entity class
             domain_uri (str): URI of the domain.
-            prop_inverse (URIRef, optional): Inverse Property. Expected rdflib.term.URIRef, e.g. CRM.P1i_identifies
             prop (URIRef): Property. Expected rdflib.term.URIRef, e.g. CRM.P1_is_identified_by
+            prop_inverse (URIRef, optional): Inverse Property. Expected rdflib.term.URIRef, e.g. CRM.P1i_identifies
+            range_class_constraint (optional): Expected class as range or a subclass thereof
 
         Returns:
             Graph: Triples in a graph
+
+        Raises:
+            ValidationError: Wrong Class or subclass provided as range.
         """
         if prop:
             assert type(prop) == URIRef, "Invalid type. Expected property prop as URIRef."
@@ -325,6 +330,12 @@ class Entity:
                 return Graph()
 
         if entity:
+            if range_class_constraint:
+                if issubclass(type(entity), range_class_constraint) is False:
+                    logging.warning(f"An instance of class '{type(entity).__name__}' is not allowed as range of"
+                                    f" '{str(prop)}'. Must be an instance of '{range_class_constraint.__name__}'"
+                                    f" or a subclass thereof.")
+                    raise ValidationError("Wrong class of range")
 
             # results graph
             g = Graph()
@@ -350,6 +361,7 @@ class Entity:
                     uris: list = None,
                     prop: URIRef = None,
                     prop_inverse: URIRef = None,
+                    range_class_constraint=None
                     ) -> bool:
         """Add triples to self.graph.
 
@@ -360,6 +372,7 @@ class Entity:
             uris (list, optional): list of uris added as range of the triples
             prop (URIRef, optional): Property
             prop_inverse (URIRef, optional) : Inverse Propery
+            range_class_constraint (optional): Expected class as range or a subclass thereof
 
         Returns:
             bool: True if successful
@@ -367,8 +380,17 @@ class Entity:
         """
         if entities:
             for entity in entities:
-                g = self.generate_property_to_entity_triples(entity, prop=prop, prop_inverse=prop_inverse)
-                self.graph = self.graph + g
+
+                try:
+                    g = self.generate_property_to_entity_triples(entity,
+                                                                 prop=prop,
+                                                                 prop_inverse=prop_inverse,
+                                                                 range_class_constraint=range_class_constraint)
+                    self.graph = self.graph + g
+
+                except ValidationError:
+                    # Wrong class or subclass was provided as range. Catch the ValidationError
+                    return False
 
             return True
 

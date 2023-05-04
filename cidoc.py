@@ -66,7 +66,13 @@ class E1CRMEntity(Entity):
         prop = CRM.P1_is_identified_by
         prop_inverse = CRM.P1i_identifies
 
-        return self.add_triples(entities=list(entities), uris=uris, prop=prop, prop_inverse=prop_inverse)
+        range_class_constraint = E41Appellation
+
+        return self.add_triples(entities=list(entities),
+                                uris=uris,
+                                prop=prop,
+                                prop_inverse=prop_inverse,
+                                range_class_constraint=range_class_constraint)
 
     def p2_has_type(self, *entities, uris: list = None) -> bool:
         """P2 has type (is type of): E55 Type
