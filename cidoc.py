@@ -2333,4 +2333,130 @@ class E52TimeSpan(E1CRMEntity):
                                 prop_inverse=prop_inverse,
                                 range_class_constraint=range_class_constraint)
 
-# E53 Place
+
+class E53Place(E1CRMEntity):
+    """E53 Place
+
+    SubClassOf E1 CRM Entity
+
+    P89 falls within (contains): E53 Place
+    P121 overlaps with: E53 Place
+    P122 borders with: E53 Place
+    P157 is at rest relative to (provides reference space for): E18 Physical Thing [Not implemented]
+    P168 place is defined by (defines place): E94 Space Primitive
+    P171 at some place within: E94 Space Primitive [Not implemented]
+    P172 contains: E94 Space Primitive [Not implemented]
+    P189 approximates (is approximated by): E53 Place [Not implemented]
+    """
+    class_uri = NAMESPACE + "E53_Place"
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+    def p89_falls_within(self, *entities, uris: list = None) -> bool:
+        """P89 falls within (contains): E53 Place
+
+        Args:
+            *entities (optional): Any number of instances of an Entity class
+            uris (list, optional): List of URIs of entities that identify this
+
+        Returns:
+             bool: True if added
+        """
+        prop = CRM.P89_falls_within
+        prop_inverse = CRM.P89i_contains
+
+        range_class_constraint = E53Place
+
+        return self.add_triples(entities=list(entities),
+                                uris=uris,
+                                prop=prop,
+                                prop_inverse=prop_inverse,
+                                range_class_constraint=range_class_constraint)
+
+    def p89i_contains(self, *entities, uris: list = None) -> bool:
+        """P89i contains (falls within): E53 Place
+
+        Args:
+            *entities (optional): Any number of instances of an Entity class
+            uris (list, optional): List of URIs of entities that identify this
+
+        Returns:
+             bool: True if added
+        """
+        prop = CRM.P89i_contains
+        prop_inverse = CRM.P89_falls_within
+
+        range_class_constraint = E53Place
+
+        return self.add_triples(entities=list(entities),
+                                uris=uris,
+                                prop=prop,
+                                prop_inverse=prop_inverse,
+                                range_class_constraint=range_class_constraint)
+
+    def p121_overlaps_with(self, *entities, uris: list = None) -> bool:
+        """P121 overlaps with: E53 Place
+
+        Property is symmetric. Both directions are added.
+
+        Args:
+            *entities (optional): Any number of instances of an Entity class
+            uris (list, optional): List of URIs of entities that identify this
+
+        Returns:
+             bool: True if added
+        """
+        prop = CRM.P121_overlaps_with
+        prop_inverse = CRM.P121_overlaps_with
+
+        range_class_constraint = E53Place
+
+        return self.add_triples(entities=list(entities),
+                                uris=uris,
+                                prop=prop,
+                                prop_inverse=prop_inverse,
+                                range_class_constraint=range_class_constraint)
+
+    def p122_borders_with(self, *entities, uris: list = None) -> bool:
+        """P122 borders with: E53 Place
+
+        Property is symmetric. Both directions are added.
+
+        Args:
+            *entities (optional): Any number of instances of an Entity class
+            uris (list, optional): List of URIs of entities that identify this
+
+        Returns:
+             bool: True if added
+        """
+        prop = CRM.P122_borders_with
+        prop_inverse = CRM.P122_borders_with
+
+        range_class_constraint = E53Place
+
+        return self.add_triples(entities=list(entities),
+                                uris=uris,
+                                prop=prop,
+                                prop_inverse=prop_inverse,
+                                range_class_constraint=range_class_constraint)
+
+    def p168_place_is_defined_by(self, value: str, datatype: str = None) -> bool:
+        """P168 place is defined by: E94 Space Primitive
+
+        Args:
+            value (str): Value
+            datatype (str, optional): Datatype that will be added to Literal. Use XSD datatypes.
+
+        Returns:
+             bool: True if added
+        """
+        prop = CRM.P168_place_is_defined_by
+
+        if datatype:
+            datatype_uri = XSD[datatype]
+            self.graph.add((URIRef(self.uri), prop, Literal(value, datatype=datatype_uri)))
+        else:
+            self.graph.add((URIRef(self.uri), prop, Literal(value)))
+
+        return True
