@@ -9,13 +9,43 @@ Notes:
 Not all classes are implemented, focus is on the classes used in the RDF serialization of DraCor data or
 CLS INFRA's clscor data model. If a class is implemented its ancestors are included withing the module.
 
+Classes, that are NOT implemented:
+- E3 Condition State
+- E8 Acquisition
+- E96 Purchase
+- E9 Move
+- E10 Transfer of Custody
+- E79 Part Addition
+- E80 Part Removal
+- E14 Condition Assessment
+- E66 Formation
+- E85 Joining
+- E86 Leaving
+- E6 Destruction
+- E68 Dissolution
+- E25 Human-Made Feature
+- E26 Physical Feature
+- E27 Site
+- E34 Inscription
+- E37 Mark
+- E95 Spacetime Primitive
+- E94 Space Primitive
+- E61 Time Primitive
+- E57 Material
+- E98 Currency
+- E97 Monetary Amount
+- E92 Spacetime Volume
+- E59 Primitive Value
+- E60 Number
+- E62 String
+
 The implemented class hierarchy follows the CIDOC-CRM class hierarchy. In rare cases, when deemed appropriate,
 some CIDOC classes might be skipped. Properties will be implemented with the child class if there are any. Not all
 properties of all classes are implemented. See class annotations for hints (marked with [Not implemented]).
 
 Naming of the classes follows Python best practices. Class names are CamelCased, e.g. E73InformationObject
 method names are in snake_case, e.g. p1_is_identified_by. Dashes in class names and names of methods are not preserved,
-e.g E71 Human-Made thing becomes E71HumanMadeThing, P4 has time-span becomes p4_has_timespan.
+e.g. E71 Human-Made thing becomes E71HumanMadeThing, P4 has time-span becomes p4_has_timespan.
 
 Inverse properties are only implemented for some classes, if it is expected, that they will be rather called from the
 range entity than the domain, e.g. E39_Actor P14i_performed  E7_Activity.
@@ -186,6 +216,27 @@ class E1CRMEntity(Entity):
         prop_inverse = CRM.P141_assigned
 
         range_class_constraint = E13AttributeAssignment
+
+        return self.add_triples(entities=list(entities),
+                                uris=uris,
+                                prop=prop,
+                                prop_inverse=prop_inverse,
+                                range_class_constraint=range_class_constraint)
+
+    def p71i_is_listed_in(self, *entities, uris: list = None) -> bool:
+        """P71i is listed in (lists): E32 Authority Document
+
+        Args:
+            *entities (optional): Any number of instances of an Entity class
+            uris (list, optional): List of URIs of entities that identify this
+
+        Returns:
+             bool: True if added
+        """
+        prop = CRM.P71i_is_listed_in
+        prop_inverse = CRM.P71_lists
+
+        range_class_constraint = E32AuthorityDocument
 
         return self.add_triples(entities=list(entities),
                                 uris=uris,
@@ -805,12 +856,56 @@ class E42Identifier(E41Appellation):
     SubClassOf E41 Appellation
 
     No specialized properties.
+    Inverse: P37i was assigned by (assigned): E15 Identifier Assignment
+    P38i was deassigned by (deassigned): E15 Identifier Assignment
     """
 
     class_uri = NAMESPACE + "E42_Identifier"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+
+    def p37i_was_assigned_by(self, *entities, uris: list = None) -> bool:
+        """P37i was assigned by (assigned): E15 Identifier Assignment
+
+        Args:
+            *entities (optional): Any number of instances of an Entity class
+            uris (list, optional): List of URIs of entities that identify this
+
+        Returns:
+             bool: True if added
+        """
+        prop = CRM.P37i_was_assigned_by
+        prop_inverse = CRM.P37_assigned
+
+        range_class_constraint = E15IdentifierAssignment
+
+        return self.add_triples(entities=list(entities),
+                                uris=uris,
+                                prop=prop,
+                                prop_inverse=prop_inverse,
+                                range_class_constraint=range_class_constraint)
+
+    def p38i_was_deassigned_by(self, *entities, uris: list = None) -> bool:
+        """P38i was deassigned by (deassigned): E15 Identifier Assignment
+
+        Args:
+            *entities (optional): Any number of instances of an Entity class
+            uris (list, optional): List of URIs of entities that identify this
+
+        Returns:
+             bool: True if added
+        """
+        prop = CRM.P38i_was_deassigned_by
+        prop_inverse = CRM.P38_deassigned
+
+        range_class_constraint = E15IdentifierAssignment
+
+        return self.add_triples(entities=list(entities),
+                                uris=uris,
+                                prop=prop,
+                                prop_inverse=prop_inverse,
+                                range_class_constraint=range_class_constraint)
 
 
 class E35Title(E41Appellation, E33LinguisticObject):
@@ -2413,10 +2508,154 @@ class E53Place(E1CRMEntity):
         """
         prop = CRM.P168_place_is_defined_by
 
-        if datatype:
-            datatype_uri = XSD[datatype]
-            self.graph.add((URIRef(self.uri), prop, Literal(value, datatype=datatype_uri)))
-        else:
-            self.graph.add((URIRef(self.uri), prop, Literal(value)))
+        return self.add_property_to_literal_value_triple(value, prop=prop, datatype=datatype)
 
-        return True
+
+class E15IdentifierAssignment(E13AttributeAssignment):
+    """E15 Identifier Assignment
+
+    SubClassOf E15 Attribute Assignment
+
+    P37 assigned (was assigned by): E42 Identifier
+    P38 deassigned (was deassigned by): E42 Identifier
+    P142 used constituent (was used in): E90 Symbolic Object [Not implemented]
+    """
+    class_uri = NAMESPACE + "E15_Identifier_Assignment"
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+    def p37_assigned(self, *entities, uris: list = None) -> bool:
+        """P37 assigned (was assigned by): E42 Identifier
+
+        Args:
+            *entities (optional): Any number of instances of an Entity class
+            uris (list, optional): List of URIs of entities that identify this
+
+        Returns:
+             bool: True if added
+        """
+        prop = CRM.P37_assigned
+        prop_inverse = CRM.P37i_was_assigned_by
+
+        range_class_constraint = E42Identifier
+
+        return self.add_triples(entities=list(entities),
+                                uris=uris,
+                                prop=prop,
+                                prop_inverse=prop_inverse,
+                                range_class_constraint=range_class_constraint)
+
+    def p38_deassigned(self, *entities, uris: list = None) -> bool:
+        """P38 deassigned (was deassigned by): E42 Identifier
+
+        Args:
+            *entities (optional): Any number of instances of an Entity class
+            uris (list, optional): List of URIs of entities that identify this
+
+        Returns:
+             bool: True if added
+        """
+        prop = CRM.P38_deassigned
+        prop_inverse = CRM.P38i_was_deassigned_by
+
+        range_class_constraint = E42Identifier
+
+        return self.add_triples(entities=list(entities),
+                                uris=uris,
+                                prop=prop,
+                                prop_inverse=prop_inverse,
+                                range_class_constraint=range_class_constraint)
+
+
+# E17 Type Assignment
+
+# E67 Birth
+
+# E81 Transformation
+
+# E64 End of Existence
+
+# E 69 Death
+
+# - E87 Curation Activity  ???
+
+# E22 Human-Made Object
+
+
+class E31Document(E73InformationObject):
+    """E31 Document
+
+    SubClassOf E73 Information Object
+
+    P70 documents (is documented in): E1 CRM Entity
+    """
+    class_uri = NAMESPACE + "E31_Document"
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+    def p70_documents(self, *entities, uris: list = None) -> bool:
+        """P70 documents (is documented in): E1 CRM Entity
+
+        Args:
+            *entities (optional): Any number of instances of an Entity class
+            uris (list, optional): List of URIs of entities that identify this
+
+        Returns:
+             bool: True if added
+        """
+        prop = CRM.P70_documents
+        prop_inverse = CRM.P70i_is_documented_in
+
+        range_class_constraint = E1CRMEntity
+
+        return self.add_triples(entities=list(entities),
+                                uris=uris,
+                                prop=prop,
+                                prop_inverse=prop_inverse,
+                                range_class_constraint=range_class_constraint)
+
+
+class E32AuthorityDocument(E31Document):
+    """E32 Authority Document
+
+    SubClassOf E31 Document
+
+    P71 lists (is listed in): E1 CRM Entity
+    """
+    class_uri = NAMESPACE + "E32_Authority_Document"
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+    def p71_lists(self, *entities, uris: list = None) -> bool:
+        """P71 lists (is listed in): E1 CRM Entity
+
+        Args:
+            *entities (optional): Any number of instances of an Entity class
+            uris (list, optional): List of URIs of entities that identify this
+
+        Returns:
+             bool: True if added
+        """
+        prop = CRM.P71_lists
+        prop_inverse = CRM.P71i_is_listed_in
+
+        range_class_constraint = E1CRMEntity
+
+        return self.add_triples(entities=list(entities),
+                                uris=uris,
+                                prop=prop,
+                                prop_inverse=prop_inverse,
+                                range_class_constraint=range_class_constraint)
+
+# E36 Visual Item
+
+# E99 Product Type
+
+# E87 Curation Activity (Maybe implement)
+
+# E78 Curated Holding (Maybe implement)
+
+
