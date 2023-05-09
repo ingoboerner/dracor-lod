@@ -20,14 +20,14 @@
     a owl:Ontology ;
     owl:versionInfo "v2.0.0";
     rdfs:label "DraCor Ontology v2"@en ;
-    rdfs:seeAlso "https://dracor.org" , https://doi.org/10.5281/zenodo.7664964 ;
+    rdfs:seeAlso <https://dracor.org> , <https://doi.org/10.5281/zenodo.7664964> ;
     rdfs:comment "This new version (v2) of the DraCor Ontology (https://raw.githubusercontent.com/dracor-org/dracor-schema/1e3922f1314991679cdf770eecacfe4446fe6a99/ontology/dracor-ontology.xml)
     formally defines the features that have been identified in the report D7.1 'On Programmable Corpora'
     (https://doi.org/10.5281/zenodo.7664964). It models the identified features from the tables Tab.01 Corpus Features,
-    Tab.02 Play Features, Tab.03 Segment Features, Tab.04 Character Features as RDF properties."
+    Tab.02 Play Features, Tab.03 Segment Features, Tab.04 Character Features as RDF properties." .
 
 ########
-Annotation Properties
+# Annotation Properties
 ########
 
 
@@ -39,8 +39,8 @@ dracon2:feature_id
 
 
 ########
-Corpus and Corpus Properties
-see D7.1 On Programmable Corpora, p. 35, Tab.01 "Corpus Features"
+# Corpus and Corpus Properties
+# see D7.1 On Programmable Corpora, p. 35, Tab.01 "Corpus Features"
 ########
 
 
@@ -209,8 +209,8 @@ dracon2:corpus_play_objects
 
 
 ########
-Play and Play Properties
-see D7.1 On Programmable Corpora, p. 37–40, Tab.02 "Play Features"
+# Play and Play Properties
+# see D7.1 On Programmable Corpora, p. 37–40, Tab.02 "Play Features"
 ########
 
 
@@ -463,7 +463,7 @@ dracon2:play_original_source_full_citation
 dracon2:play_original_source_publisher
     a rdf:Property, owl:DatatypeProperty ;
     rdfs:domain dracon2:play ;
-    rdfs:range rdfs:Literal
+    rdfs:range rdfs:Literal ;
     rdfs:label "Full Citation of the Play's Original Source of a Play" ;
     dracon2:feature_id "P31" .
 
@@ -727,8 +727,8 @@ dracon2:play_network_max_degree_character_ids
 
 
 ########
-Segment and Segment Properties
-see D7.1 On Programmable Corpora, p. 35, Tab.03 "Segment Features"
+# Segment and Segment Properties
+# see D7.1 On Programmable Corpora, p. 35, Tab.03 "Segment Features"
 ########
 
 dracon2:segment
@@ -768,8 +768,8 @@ dracon2:segment_speaking_characters
 
 
 ########
-Character and Character Properties
-see D7.1 On Programmable Corpora, p. 35, Tab.04 "Character Features"
+# Character and Character Properties
+# see D7.1 On Programmable Corpora, p. 35, Tab.04 "Character Features"
 ########
 
 
