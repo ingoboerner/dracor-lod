@@ -3,7 +3,7 @@
 Used current production version (v0.89.0).
 
 """
-from marshmallow import Schema, fields, ValidationError
+from marshmallow import Schema, fields, validate, ValidationError
 import logging
 
 
@@ -316,7 +316,7 @@ class PlayMetadataSchema(Schema):
     #       "http://theatre-classique.fr/pages/programmes/edition.php?t=../documents/ABEILLE_ARGELIE.xml",
     #       "http://theatre-classique.fr/pages/documents/ABEILLE_ARGELIE.xml"
     #     ]
-    # This is a hack with a custom field:
+    # This is a hack with a custom field: This is nor perfect, because actually, it should check if the value is a URL.
     digitalSource = StringOrListOfStringsField(allow_none=True)
     # P31 play_original_source_publisher
     originalSourcePublisher = fields.Str(allow_none=True)
@@ -373,7 +373,145 @@ class PlayMetadataSchema(Schema):
     # P46 play_network_max_degree_character_ids
     maxDegreeIds = fields.Str()
 
+# /corpus/{corpusname}/play/{playname}
 
+class AuthorInPlayMetadataSchema(Schema):
+    """Author Object in the object returned by the /corpora/{corpusname}/play/{playname}"""
+    # P9 play_author_name
+    name = fields.Str()
+    # P10 play_author_name_en
+    nameEn = fields.Str(required=False)
+    # P11 play_author_fullname
+    fullname = fields.Str()
+    # P12 play_author_fullname_en
+    fullnameEn = fields.Str(required=False)
+    # P13 play_author_shortname
+    shortname = fields.Str()
+    # P14 play_author_shortname_en
+    shortnameEn = fields.Str()
+    # P18 play_author_also_known_as
+    alsoKnownAs = fields.List(fields.Str(), required=False)
+    # IDs in External Reference Resources
+    refs = fields.List(fields.Nested(ExternalReferenceResourceIdSchema))
+
+
+class FirstAuthorInPlayMetadataSchema(Schema):
+    """(Deprecated) First Author Object in PlayMetadataSchema"""
+    # P15 play_first_author_name
+    name = fields.Str()
+    # P17 play_first_author_deprecation_warning
+    warning = fields.Str(
+        validate=validate.Equal("The single author property is deprecated. Use the array of 'authors' instead!"))
+
+
+class SourceInPlayMetadataSchema(Schema):
+    """Source object included in the play metadata object returned by the /corpora/{corpusname}/play/{playname}
+    endpoint"""
+    # P28 play_digital_source_name
+    # HunDraCor has plays w/o this value
+    name = fields.Str(allow_none=True)
+    # P29 play_digital_source_url
+    # url = fields.Url()
+    # This is a hack because of CalDraCor
+    # TODO: revert that back to URL
+    url = StringOrListOfStringsField(allow_none=True)
+
+
+class CastItemInPlayMetadataSchema(Schema):
+    """Character data as included in the response object of the /corpora/{corpusname}/play/{playname} endpoint"""
+    # Ch1 character_id
+    id = fields.Str()
+    # Ch2 character_name
+    # In CalDraCor this can be None/null
+    name = fields.Str(allow_none=True)
+    # Ch3 character_is_group
+    isGroup = fields.Bool()
+    # Ch4 character_gender
+    # In CalDraCor this can be null/None
+    # CalDraCor has "DIVERSE" for some obscure reason
+    # Change below, if CalDraCor must be validated, this is no fun anyway.
+    sex = fields.Str(validate=validate.OneOf(["MALE", "FEMALE", "UNKNOWN"]), allow_none=True)
+    # sex = fields.Str(validate=validate.OneOf(["MALE", "FEMALE", "UNKNOWN", "DIVERSE"]), allow_none=True)
+    # Ch5 character_wikidata_id
+    wikidataId = fields.Str(required=False)
+
+
+class SegmentItemInPlayMetadataSchema(Schema):
+    """Segment data as included in the response object of the /corporoa/{corpusname}/play/{playname} endpoint"""
+    # S1 segment_type
+    # in CalDraCor this can be null/None
+    # TODO: maybe disallow None/null?
+    type = fields.Str(allow_none=True)
+    # S2 segment_number
+    number = fields.Int()
+    # S3 segment_title
+    title = fields.Str()
+    # S4 segment_speaking_characters
+    speakers = fields.List(fields.Str())
+
+
+class RelationItemInPlayMetadataSchema(Schema):
+    """Relation data as included in the response object of the /corporoa/{corpusname}/play/{playname} endpoint"""
+    # No features have been defined for a relation; relations in general are P52 play_character_relations
+    directed = fields.Bool()
+    # Values see ODD
+    # https://github.com/dracor-org/dracor-schema/blob/a6e5b26f7156557cc460e16a75c5e274d2775f5b/odd/dracor.odd#L4600-L4631
+    type = fields.Str(validate=validate.OneOf(["parent_of", "lover_of", "related_with", "associated_with",
+                                               "siblings", "spouses", "friends"]))
+    source = fields.Str()
+    target = fields.Str()
+
+
+class PlaySchema(Schema):
+    """Response Object returned by the /corpora/{corpusname}/play/{playname} endpoint"""
+    # P1 play_corpus_name
+    corpus = fields.Str()
+    # P2 play_id
+    id = fields.Str()
+    # P3 play_name (duplicates "name" and "playName")
+    name = fields.Str()
+    # P4 play_wikidata_id
+    wikidataId = fields.Str(allow_none=True)
+    # P5 play_title
+    title = fields.Str()
+    # P7 play_title_en
+    titleEn = fields.Str(required=False)
+    # P6 play_subtitle
+    subtitle = fields.Str(allow_none=True)
+    # P8 play_subtitle_en
+    subtitleEn = fields.Str(required=False)
+    # (deprecated) first author
+    author = fields.Nested(FirstAuthorInPlayMetadataSchema)
+    # authors as list/array
+    authors = fields.List(fields.Nested(AuthorInPlayMetadataSchema))
+    # P22 play_genre_normalized
+    genre = fields.Str(allow_none=True)
+    # P23 play_is_libretto
+    libretto = fields.Bool()
+    # P24 play_year_written
+    yearWritten = fields.Str(allow_none=True)
+    # P25 play_year_printed
+    yearPrinted = fields.Str(allow_none=True)
+    # P26 play_year_premiered
+    yearPremiered = fields.Str(allow_none=True)
+    # P27 play_year_normalized
+    yearNormalized = fields.Int(allow_none=True)
+    # P30 play_original_source_full_citation
+    originalSource = fields.Str()
+    # digital source data
+    source = fields.Nested(SourceInPlayMetadataSchema)
+    # P50 play_all_in_segment
+    # not available in FreDraCor for all plays
+    allInSegment = fields.Int(allow_none=True)
+    # P51 play_all_in_index [MUST between 0 and 1]
+    # not available in FreDraCor for all plays
+    allInIndex = fields.Float(validate=validate.Range(0, 1, min_inclusive=True, max_inclusive=True), allow_none=True)
+    # P44 play_characters
+    cast = fields.List(fields.Nested(CastItemInPlayMetadataSchema))
+    # P36 play_segments
+    segments = fields.List(fields.Nested(SegmentItemInPlayMetadataSchema))
+    # P52 play_character_relations
+    relations = fields.List(fields.Nested(RelationItemInPlayMetadataSchema))
 
 # characterGender = fields.Str(validate=validate.OneOf(["male", "female", "nonbinary"]))
 
