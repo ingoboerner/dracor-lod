@@ -33,8 +33,19 @@
 
 dracon2:feature_id
     a owl:AnnotationProperty ;
-    rdfs:label "Feature ID";
+    rdfs:label "Feature ID"@en;
     rdfs:comment "ID of the feature in the report 'On Programmable Corpora' (https://doi.org/10.5281/zenodo.7664964). See column 'No.' in Tab. 01, 02, 03, 04.";
+    rdfs:range rdfs:Literal .
+
+dracon2:xpath
+    a owl:AnnotationProperty ;
+    rdfs:label "XPath"@en ;
+    rdfs:comment "XPath expression that extracts the information from a DraCor TEI-file starting at the document root.
+    It is expected that the encoding adheres to the the DraCor TEI customization documented in the ODD.
+    Although it SHOULD return the actual value of the feature, this XPath expression is for reference only.
+    It might not be the exact same construct, that is used in the XQuery based implementation of the API
+    in the eXist-DB. The extraction algorithm implemented might use a different XPath and/or a combination of
+    XQuery functions."@en ;
     rdfs:range rdfs:Literal .
 
 
@@ -58,6 +69,7 @@ dracon2:corpus_name
     rdfs:range rdfs:Literal ;
     rdfs:label "Corpus Name"@en ;
     dracon2:feature_id "C1" .
+
 
 dracon2:corpus_uri
     a rdf:Property, owl:DatatypeProperty ;
@@ -239,7 +251,8 @@ dracon2:play_id
     rdfs:domain dracon2:play ;
     rdfs:range  rdfs:Literal;
     rdfs:label "DraCor ID of the Play"@en ;
-    dracon2:feature_id "P2" .
+    dracon2:feature_id "P2" ;
+    dracon2:xpath "/tei:TEI/@xml:id" .
 
 
 dracon2:play_name
@@ -255,7 +268,8 @@ dracon2:play_wikidata_id
     rdfs:domain dracon2:play ;
     rdfs:range  rdfs:Literal;
     rdfs:label "Wikidata ID of the Play"@en ;
-    dracon2:feature_id "P4" .
+    dracon2:feature_id "P4" ;
+    dracon2:xpath "substring-after(/tei:TEI/tei:standOff/tei:listRelation/tei:relation[@name='wikidata'][1]/@passive/string(),'http://www.wikidata.org/entity/')" .
 
 
 dracon2:play_title
@@ -263,7 +277,8 @@ dracon2:play_title
     rdfs:domain dracon2:play ;
     rdfs:range  rdfs:Literal;
     rdfs:label "Title of the Play"@en ;
-    dracon2:feature_id "P5" .
+    dracon2:feature_id "P5" ;
+    dracon2:xpath "/tei:TEI/tei:teiHeader/tei:fileDesc[1]/tei:titleStmt/tei:title[not(@type = 'sub') and not(@xml:lang or ./ancestor::tei:TEI/@xml:lang = @xml:lang)]/normalize-space()" .
 
 
 dracon2:play_subtitle
@@ -271,7 +286,8 @@ dracon2:play_subtitle
     rdfs:domain dracon2:play ;
     rdfs:range  rdfs:Literal;
     rdfs:label "Subtitle of the Play"@en ;
-    dracon2:feature_id "P6" .
+    dracon2:feature_id "P6" ;
+    dracon2:xpath "/tei:TEI/tei:teiHeader/tei:fileDesc[1]/tei:titleStmt/tei:title[@type = 'sub' and not(@xml:lang or ./ancestor::tei:TEI/@xml:lang = @xml:lang)]/normalize-space()" .
 
 
 dracon2:play_title_en
@@ -279,7 +295,8 @@ dracon2:play_title_en
     rdfs:domain dracon2:play ;
     rdfs:range  rdfs:Literal;
     rdfs:label "English Title of the Play"@en ;
-    dracon2:feature_id "P7" .
+    dracon2:feature_id "P7" ;
+    dracon2:xpath "/tei:TEI/tei:teiHeader/tei:fileDesc[1]/tei:titleStmt/tei:title[not(@type = 'sub') and @xml:lang = 'eng' and ./ancestor::tei:TEI/@xml:lang != 'eng']/normalize-space()" .
 
 
 dracon2:play_subtitle_en
@@ -287,7 +304,8 @@ dracon2:play_subtitle_en
     rdfs:domain dracon2:play ;
     rdfs:range  rdfs:Literal;
     rdfs:label "English Subtitle of the Play"@en ;
-    dracon2:feature_id "P8" .
+    dracon2:feature_id "P8" ;
+    dracon2:xpath "/tei:TEI/tei:teiHeader/tei:fileDesc[1]/tei:titleStmt/tei:title[@type = 'sub' and @xml:lang = 'eng' and ./ancestor::tei:TEI/@xml:lang != 'eng']/normalize-space()" .
 
 
 dracon2:play_author_name
@@ -418,7 +436,8 @@ dracon2:play_year_written
     rdfs:label "Jahr der Entstehung"@de ;
     rdfs:label "Год написания"@ru ;
     rdfs:comment "Year the Play was written"@en ;
-    dracon2:feature_id "P24" .
+    dracon2:feature_id "P24" ;
+    dracon2:xpath "/tei:TEI/tei:standOff/tei:listEvent/tei:event[@type='written']/@when|@notBefore|@notAfter" .
 
 
 dracon2:play_year_printed
@@ -429,7 +448,8 @@ dracon2:play_year_printed
     rdfs:label "Jahr der Veröffentlichung"@de ;
     rdfs:label "Год издания"@ru ;
     rdfs:comment "Year the Play was published"@en ;
-    dracon2:feature_id "P25" .
+    dracon2:feature_id "P25" ;
+    dracon2:xpath "/tei:TEI/tei:standOff/tei:listEvent/tei:event[@type='print']/@when|@notBefore|@notAfter" .
 
 
 dracon2:play_year_premiered
@@ -440,7 +460,8 @@ dracon2:play_year_premiered
     rdfs:label "Jahr der Erstaufführung"@de ;
     rdfs:label "Год премьеры"@ru ;
     rdfs:comment "Year the Play was premiered"@en ;
-    dracon2:feature_id "P26" .
+    dracon2:feature_id "P26" ;
+    dracon2:xpath "/tei:TEI/tei:standOff/tei:listEvent/tei:event[@type='premiere']/@when|@notBefore|@notAfter" .
 
 
 dracon2:play_year_normalized
@@ -462,7 +483,8 @@ dracon2:play_digital_source_name
     rdfs:domain dracon2:play ;
     rdfs:range rdfs:Literal;
     rdfs:label "Name of the Digital Source of a Play"@en ;
-    dracon2:feature_id "P28" .
+    dracon2:feature_id "P28" ;
+    dracon2:xpath "/tei:TEI/tei:teiHeader/tei:fileDesc/tei:sourceDesc/tei:bibl[@type='digitalSource']/tei:name/string()" .
 
 
 dracon2:play_digital_source_url
@@ -470,7 +492,8 @@ dracon2:play_digital_source_url
     rdfs:domain dracon2:play ;
     rdfs:range xsd:anyURI;
     rdfs:label "URL of the Digital Source of a Play"@en ;
-    dracon2:feature_id "P29" .
+    dracon2:feature_id "P29" ;
+    dracon2:xpath "/tei:TEI/tei:teiHeader/tei:fileDesc/tei:sourceDesc/tei:bibl[@type='digitalSource']/tei:idno[@type='URL'][1]/string()" .
 
 
 dracon2:play_original_source_full_citation
